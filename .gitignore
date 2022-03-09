@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
+### Banco de dados H2 ###
+jmercadobackend.mv.db
+
 ### mvn ###
 .mvn
 mvnw*

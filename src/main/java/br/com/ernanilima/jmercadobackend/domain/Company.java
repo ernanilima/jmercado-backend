@@ -34,7 +34,7 @@ public class Company implements Serializable {
     private String tradingName; // nome fantasia
 
     @Column(length = 20, unique = true, nullable = false)
-    private long ein; // cnpj
+    private String ein; // cnpj
 
     @OneToOne(cascade = CascadeType.ALL)
     private Telephone telephone;
@@ -45,7 +45,7 @@ public class Company implements Serializable {
     @OneToMany(mappedBy = "company")
     private List<User> userList = new ArrayList<>();
 
-    public Company(UUID id, String companyName, String tradingName, long ein) {
+    public Company(UUID id, String companyName, String tradingName, String ein) {
         this.id = id;
         this.companyName = companyName;
         this.tradingName = tradingName;
