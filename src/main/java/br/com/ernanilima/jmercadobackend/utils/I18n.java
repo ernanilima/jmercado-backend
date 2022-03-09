@@ -7,17 +7,20 @@ import java.util.ResourceBundle;
 
 public class I18n {
 
-    public static final String INTEGRITY_INSERT = "integrity.insert";
-    public static final String INTEGRITY_UPDATE = "integrity.updade";
-    public static final String INTEGRITY_DELETE = "integrity.delete";
-    public static final String NOT_FOUND = "not.found";
-    public static final String MESSAGE_ERROR_COUNT = "message.error.count";
-    public static final String MESSAGE_ERROR_CEP = "message.error.cep";
     public static final String ROLE_SUPPORT = "role.support";
     public static final String ROLE_FIND = "role.find";
     public static final String ROLE_INSERT = "role.insert";
     public static final String ROLE_UPDATE = "role.update";
     public static final String ROLE_DELETE = "role.delete";
+
+    public static final String NOT_FOUND_EIN = "not.found.ein";
+
+//    public static final String INTEGRITY_INSERT = "integrity.insert";
+//    public static final String INTEGRITY_UPDATE = "integrity.updade";
+//    public static final String INTEGRITY_DELETE = "integrity.delete";
+//    public static final String MESSAGE_ERROR_COUNT = "message.error.count";
+//    public static final String MESSAGE_ERROR_CEP = "message.error.cep";
+
 
     /**
      * @param e DataIntegrityViolationException

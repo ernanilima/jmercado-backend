@@ -3,9 +3,12 @@ package br.com.ernanilima.jmercadobackend.service.impl;
 import br.com.ernanilima.jmercadobackend.domain.Company;
 import br.com.ernanilima.jmercadobackend.repository.CompanyRepository;
 import br.com.ernanilima.jmercadobackend.service.CompanyService;
+import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundException;
+import br.com.ernanilima.jmercadobackend.utils.I18n;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +45,14 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company findByEin(String ein) {
         Optional<Company> model = companyRepository.findByEin(ein);
-        return model.get();
+        return model.orElseThrow(() ->
+                // cria uma mensagem de erro
+                new ObjectNotFoundException(
+                        MessageFormat.format(
+                                I18n.getSimpleMessage(I18n.NOT_FOUND_EIN), ein, I18n.getClassSimpleNameI18n(Company.class.getSimpleName())
+                        )
+                )
+        );
     }
 
     @Override
