@@ -24,4 +24,15 @@ public class CompanyResource {
         List<Company> companyList = companyService.findAll();
         return ResponseEntity.ok().body(companyList);
     }
+
+    /**
+     * Buscar empresa pelo cnpj
+     * @param cnpj String
+     * @return ResponseEntity<Company>
+     */
+    @RequestMapping(value = "/{cnpj}", method = RequestMethod.GET)
+    public ResponseEntity<Company> findByEin(@PathVariable String cnpj) {
+        Company company = companyService.findByEin(cnpj);
+        return ResponseEntity.ok().body(company);
+    }
 }

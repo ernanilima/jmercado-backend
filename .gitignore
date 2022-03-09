@@ -33,7 +33,8 @@ build/
 .vscode/
 
 ### Banco de dados H2 ###
-jmercadobackend.mv.db
+*.mv.db
+*.trace.db
 
 ### mvn ###
 .mvn
