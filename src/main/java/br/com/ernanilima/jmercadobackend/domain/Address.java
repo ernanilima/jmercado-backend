@@ -1,10 +1,11 @@
 package br.com.ernanilima.jmercadobackend.domain;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -14,7 +15,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "address")
 public class Address implements Serializable {
@@ -24,7 +24,8 @@ public class Address implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(length = 36, unique = true, nullable = false, updatable = false)
+    @Type(type = "uuid-char")
+    @Column(length = 36, unique = true)
     private UUID id;
 
     @Column(length = 8, nullable = false)
@@ -51,4 +52,20 @@ public class Address implements Serializable {
     @Column(length = 50)
     private String complement; // complemento
 
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
+
+    public Address(UUID id, long zipCode, String country, String city, String state, String district, String street, String number, String complement) {
+        this.id = id;
+        this.zipCode = zipCode;
+        this.country = country;
+        this.city = city;
+        this.state = state;
+        this.district = district;
+        this.street = street;
+        this.number = number;
+        this.complement = complement;
+    }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -27,7 +28,8 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(length = 36, unique = true, nullable = false, updatable = false)
+    @Type(type = "uuid-char")
+    @Column(length = 36, unique = true)
     private UUID id;
 
     @Column(length = 50, nullable = false)
