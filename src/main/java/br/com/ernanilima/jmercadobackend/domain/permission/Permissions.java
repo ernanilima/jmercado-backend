@@ -8,11 +8,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Permissions {
 
-    SUPPORT(9999, "ROLE_SUPPORT", I18n.getSimpleMessage(I18n.ROLE_SUPPORT)),
-    FIND(1, "ROLE_FIND", I18n.getSimpleMessage(I18n.ROLE_FIND)),
-    INSERT(2, "ROLE_INSERT", I18n.getSimpleMessage(I18n.ROLE_INSERT)),
-    UPDATE(3, "ROLE_UPDATE", I18n.getSimpleMessage(I18n.ROLE_UPDATE)),
-    DELETE(4, "ROLE_DELETE", I18n.getSimpleMessage(I18n.ROLE_DELETE));
+    SUPPORT(9999, "ROLE_SUPPORT", I18n.getMessage(I18n.ROLE_SUPPORT)),
+    FIND(1, "ROLE_FIND", I18n.getMessage(I18n.ROLE_FIND)),
+    INSERT(2, "ROLE_INSERT", I18n.getMessage(I18n.ROLE_INSERT)),
+    UPDATE(3, "ROLE_UPDATE", I18n.getMessage(I18n.ROLE_UPDATE)),
+    DELETE(4, "ROLE_DELETE", I18n.getMessage(I18n.ROLE_DELETE));
 
     private int id;
     private String role;

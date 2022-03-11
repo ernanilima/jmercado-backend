@@ -1,5 +1,6 @@
 package br.com.ernanilima.jmercadobackend.resource.exception;
 
+import br.com.ernanilima.jmercadobackend.service.exception.DataIntegrityException;
 import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,20 @@ import javax.servlet.http.HttpServletRequest;
  */
 @ControllerAdvice
 public class ResourceExceptionHandler {
+
+    /**
+     * Exibe um erro persolanilado para integridade de dados,
+     * atualmente usado quando inserir ou atualizar objeto
+     * @param e DataIntegrityException
+     * @param r HttpServletRequest
+     * @return ResponseEntity<StandardError>
+     */
+    @ExceptionHandler(DataIntegrityException.class)
+    public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException e, HttpServletRequest r) {
+        StandardError standardError = new StandardError(
+                System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Integridade de dados", e.getMessage(), r.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
+    }
 
     /**
      * Exibe um erro persolanilado para busca nao encontrada

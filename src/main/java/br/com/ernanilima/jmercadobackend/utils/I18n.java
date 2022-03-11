@@ -15,44 +15,39 @@ public class I18n {
 
     public static final String NOT_FOUND_EIN = "not.found.ein";
 
-//    public static final String INTEGRITY_INSERT = "integrity.insert";
-//    public static final String INTEGRITY_UPDATE = "integrity.updade";
+    public static final String INTEGRITY_IN_UP = "integrity.insert.updade";
+
 //    public static final String INTEGRITY_DELETE = "integrity.delete";
 //    public static final String MESSAGE_ERROR_COUNT = "message.error.count";
 //    public static final String MESSAGE_ERROR_CEP = "message.error.cep";
 
 
     /**
-     * @param e DataIntegrityViolationException
-     * @return String - field name that had the error, translated field name
+     * @param e DataIntegrityViolationException - erro
+     * @return String - nome do campo com o erro
      */
-    public static String getErrorFieldNameI18n(DataIntegrityViolationException e) {
+    public static String getFieldName(DataIntegrityViolationException e) {
         String exception = e.getMostSpecificCause().getMessage();
+        // exemplo: PUBLIC.COMPANY(EIN NULLS FIRST)
+        int startField = exception.indexOf("(") + 1; // primeiro '('
+        int endField = exception.indexOf(" ", startField); // primeiro ' ' a partir do index informado
         return ResourceBundle.getBundle("messages", Locale.getDefault())
-                .getString(exception.substring(exception.indexOf("(") + 1, exception.indexOf(")")).toLowerCase());
+                .getString(exception.substring(startField, endField).toLowerCase());
     }
 
     /**
      * @param s String
-     * @return String - field name that had the error, translated field name
+     * @return String - nome da classe
      */
-    public static String getErrorFieldNameI18n(String s) {
-        return getSimpleMessage(s);
+    public static String getClassName(String s) {
+        return getMessage(s);
     }
 
     /**
-     * @param s String
-     * @return String - translated class name
+     * @param s String - tipo de mensagem
+     * @return String - mensagem
      */
-    public static String getClassSimpleNameI18n(String s) {
-        return getSimpleMessage(s);
-    }
-
-    /**
-     * @param s String
-     * @return String - translated message
-     */
-    public static String getSimpleMessage(String s) {
+    public static String getMessage(String s) {
         return ResourceBundle.getBundle("messages", Locale.getDefault())
                 .getString(s.toLowerCase());
     }
