@@ -56,7 +56,7 @@ public class CompanyDto implements Serializable {
     }
 
     /**
-     * Converter um dto para o model
+     * Converter o dto para um model
      * @return Company
      */
     public Company toModel() {

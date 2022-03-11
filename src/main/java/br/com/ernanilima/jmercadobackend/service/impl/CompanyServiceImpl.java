@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -28,8 +29,9 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company update(Company company) {
-        return null;
+    public Company update(CompanyDto companyDto) {
+        Company company = companyDto.toModel();
+        return insertUpdate(company);
     }
 
     /**
@@ -58,7 +60,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     /**
-     * Buscar empresa pelo cnpj
+     * Buscar uma empresa pelo cnpj
      * @param ein String
      * @return Company
      */
@@ -76,7 +78,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void delete(Company company) {
+    public void delete(UUID id) {
 
     }
 }

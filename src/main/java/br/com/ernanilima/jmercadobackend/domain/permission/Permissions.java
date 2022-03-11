@@ -24,7 +24,7 @@ public enum Permissions {
     }
 
     /**
-     * @param id Integer - id to permission
+     * @param id Integer - id da permissao
      * @return Permission
      */
     public static Permission toEnum(Integer id) {

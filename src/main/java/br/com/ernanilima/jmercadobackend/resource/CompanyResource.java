@@ -20,6 +20,11 @@ public class CompanyResource {
     @Autowired
     private CompanyService companyService;
 
+    /**
+     * Inserir uma empresa
+     * @param companyDto CompanyDto
+     * @return ResponseEntity<Void>
+     */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> insert(@Valid @RequestBody CompanyDto companyDto) {
         companyService.insert(companyDto);
@@ -30,7 +35,7 @@ public class CompanyResource {
 
     /**
      * Buscar todas as empresas
-     * @return ResponseEntity<List<Company>>
+     * @return ResponseEntity<List<CompanyDto>>
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<CompanyDto>> findAll() {
@@ -42,7 +47,7 @@ public class CompanyResource {
     }
 
     /**
-     * Buscar empresa pelo cnpj
+     * Buscar uma empresa pelo cnpj
      * @param ein String
      * @return ResponseEntity<Company>
      */

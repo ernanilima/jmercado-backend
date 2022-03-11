@@ -4,11 +4,12 @@ import br.com.ernanilima.jmercadobackend.domain.Company;
 import br.com.ernanilima.jmercadobackend.dto.CompanyDto;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface CompanyService {
     Company insert(CompanyDto companyDto);
-    Company update(Company company);
+    Company update(CompanyDto companyDto);
     List<Company> findAll();
     Company findByEin(String ein);
-    void delete(Company company);
+    void delete(UUID id);
 }
