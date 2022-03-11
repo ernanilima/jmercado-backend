@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serial;
 import java.io.Serializable;
@@ -35,6 +36,10 @@ public class CompanyDto implements Serializable {
     @Length(min = 14, max = 14, message = "{length.ein.field}")
     private String ein; // cnpj
 
+    @NotEmpty(message = "{empty.field}")
+    @Email(message = "{email.field}")
+    private String email;
+
     private Telephone telephone;
 
     @Valid
@@ -45,6 +50,7 @@ public class CompanyDto implements Serializable {
         this.companyName = company.getCompanyName();
         this.tradingName = company.getTradingName();
         this.ein = company.getEin();
+        this.email = company.getEmail();
         this.telephone = company.getTelephone();
         this.address = new AddressDto(company.getAddress());
     }
@@ -54,7 +60,7 @@ public class CompanyDto implements Serializable {
      * @return Company
      */
     public Company toModel() {
-        Company company = new Company(this.id, this.companyName, this.tradingName, this.ein);
+        Company company = new Company(this.id, this.companyName, this.tradingName, this.ein, this.email);
         company.setTelephone(this.telephone);
         Address address = this.address.toModel();
         address.setCompany(company);

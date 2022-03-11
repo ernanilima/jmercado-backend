@@ -38,6 +38,9 @@ public class Company implements Serializable {
     @Column(length = 20, unique = true, nullable = false)
     private String ein; // cnpj
 
+    @Column(length = 50, unique = true, nullable = false)
+    private String email;
+
     @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
     private Telephone telephone;
 
@@ -47,10 +50,11 @@ public class Company implements Serializable {
     @OneToMany(mappedBy = "company")
     private List<User> userList = new ArrayList<>();
 
-    public Company(UUID id, String companyName, String tradingName, String ein) {
+    public Company(UUID id, String companyName, String tradingName, String ein, String email) {
         this.id = id;
         this.companyName = companyName;
         this.tradingName = tradingName;
         this.ein = ein;
+        this.email = email;
     }
 }

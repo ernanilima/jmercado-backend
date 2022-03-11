@@ -4,6 +4,8 @@ import br.com.ernanilima.jmercadobackend.service.exception.DataIntegrityExceptio
 import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -16,7 +18,25 @@ import javax.servlet.http.HttpServletRequest;
 public class ResourceExceptionHandler {
 
     /**
-     * Exibe um erro persolanilado para integridade de dados,
+     * Exibe uma lista erros, um erro personalizado para cada validacao que nao foi atendida
+     * @param e MethodArgumentNotValidException
+     * @param r HttpServletRequest
+     * @return ResponseEntity<StandardError>
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<StandardError> argumentNotValid(MethodArgumentNotValidException e, HttpServletRequest r) {
+        String message = "Quantidade de erro(s): " + e.getErrorCount();
+        ValidationError validarErro = new ValidationError(
+                System.currentTimeMillis(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação", message, r.getRequestURI());
+
+        for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
+            validarErro.addError(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(validarErro);
+    }
+
+    /**
+     * Exibe um erro persolanizado para integridade de dados,
      * atualmente usado quando inserir ou atualizar objeto
      * @param e DataIntegrityException
      * @param r HttpServletRequest
@@ -30,7 +50,7 @@ public class ResourceExceptionHandler {
     }
 
     /**
-     * Exibe um erro persolanilado para busca nao encontrada
+     * Exibe um erro persolanizado para busca nao encontrada
      * Esse erro eh exibido automaticamente para a classe {@link ObjectNotFoundException}
      * @param e ObjectNotFoundException
      * @param r HttpServletRequest
