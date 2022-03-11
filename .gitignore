@@ -39,3 +39,6 @@ build/
 ### mvn ###
 .mvn
 mvnw*
+
+### Temp ###
+src/main/java/br/com/ernanilima/jmercadobackend/utils/DataTemp.java

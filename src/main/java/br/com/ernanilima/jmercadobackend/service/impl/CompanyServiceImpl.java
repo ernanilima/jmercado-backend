@@ -1,6 +1,7 @@
 package br.com.ernanilima.jmercadobackend.service.impl;
 
 import br.com.ernanilima.jmercadobackend.domain.Company;
+import br.com.ernanilima.jmercadobackend.dto.CompanyDto;
 import br.com.ernanilima.jmercadobackend.repository.CompanyRepository;
 import br.com.ernanilima.jmercadobackend.service.CompanyService;
 import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundException;
@@ -19,8 +20,9 @@ public class CompanyServiceImpl implements CompanyService {
     private CompanyRepository companyRepository;
 
     @Override
-    public Company insert(Company company) {
-        return null;
+    public Company insert(CompanyDto companyDto) {
+        Company company = companyDto.toModel();
+        return companyRepository.save(company);
     }
 
     @Override
