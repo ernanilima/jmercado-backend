@@ -41,4 +41,7 @@ build/
 mvnw*
 
 ### Temp ###
-src/main/java/br/com/ernanilima/jmercadobackend/utils/DataTemp.java
+**/DataTemp.java
+
+### Dados privados ###
+**/jwt.properties
