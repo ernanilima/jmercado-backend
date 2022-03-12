@@ -15,6 +15,7 @@ public class I18n {
 
     public static final String NOT_FOUND_COMPANY = "not.found.company";
     public static final String NOT_FOUND_EIN = "not.found.ein";
+    public static final String NOT_FOUND_USER = "not.found.user";
     public static final String NOT_FOUND_EMAIL = "not.found.email";
 
     public static final String INTEGRITY_IN_UP = "integrity.insert.updade";

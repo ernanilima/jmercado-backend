@@ -11,6 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,6 +32,19 @@ public class UserResource {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(userDto.getIdUser()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    /**
+     * Atualizar uma usuario
+     * @param userDto UserDto
+     * @param idUser UUID
+     * @return ResponseEntity<Void>
+     */
+    @RequestMapping(value = "/{idUser}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> update(@Valid @RequestBody UserDto userDto, @PathVariable UUID idUser) {
+        userDto.setIdUser(idUser);
+        userService.update(userDto);
+        return ResponseEntity.noContent().build();
     }
 
     /**
