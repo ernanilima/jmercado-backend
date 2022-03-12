@@ -30,7 +30,7 @@ public class User implements Serializable {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Type(type = "uuid-char")
     @Column(length = 36, unique = true)
-    private UUID id;
+    private UUID idUser;
 
     @Column(length = 50, nullable = false)
     private String name;
@@ -55,8 +55,8 @@ public class User implements Serializable {
         this.setPermissions(List.of(Permissions.toEnum(Permissions.FIND.getId())));
     }
 
-    public User(UUID id, String name, String email, String password) {
-        this.id = id;
+    public User(UUID idUser, String name, String email, String password) {
+        this.idUser = idUser;
         this.name = name;
         this.email = email;
         this.password = password;

@@ -26,7 +26,7 @@ public class Address implements Serializable {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Type(type = "uuid-char")
     @Column(length = 36, unique = true)
-    private UUID id;
+    private UUID idAddress;
 
     @Column(length = 8, nullable = false)
     private long zipCode; // cep
@@ -57,8 +57,8 @@ public class Address implements Serializable {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    public Address(UUID id, long zipCode, String country, String city, String state, String district, String street, String number, String complement) {
-        this.id = id;
+    public Address(UUID idAddress, long zipCode, String country, String city, String state, String district, String street, String number, String complement) {
+        this.idAddress = idAddress;
         this.zipCode = zipCode;
         this.country = country;
         this.city = city;

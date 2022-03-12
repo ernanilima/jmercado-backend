@@ -10,6 +10,7 @@ public interface CompanyService {
     Company insert(CompanyDto companyDto);
     Company update(CompanyDto companyDto);
     List<Company> findAll();
+    Company findById(UUID idCompany);
     Company findByEin(String ein);
-    void delete(UUID id);
+    void delete(UUID idCompany);
 }

@@ -11,6 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,8 +30,21 @@ public class CompanyResource {
     public ResponseEntity<Void> insert(@Valid @RequestBody CompanyDto companyDto) {
         companyService.insert(companyDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(companyDto.getId()).toUri();
+                .path("/{id}").buildAndExpand(companyDto.getIdCompany()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    /**
+     * Atualizar uma empresa
+     * @param companyDto CompanyDto
+     * @param idCompany UUID
+     * @return ResponseEntity<Void>
+     */
+    @RequestMapping(value = "/{idCompany}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> update(@Valid @RequestBody CompanyDto companyDto, @PathVariable UUID idCompany) {
+        companyDto.setIdCompany(idCompany);
+        companyService.update(companyDto);
+        return ResponseEntity.noContent().build();
     }
 
     /**

@@ -26,7 +26,7 @@ public class Telephone implements Serializable {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Type(type = "uuid-char")
     @Column(length = 36, unique = true)
-    private UUID id;
+    private UUID idTelephone;
 
     @Column(length = 15)
     private String telephone;
@@ -41,8 +41,8 @@ public class Telephone implements Serializable {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    public Telephone(UUID id, String telephone, String cellPhone, boolean whatsappCellPhone) {
-        this.id = id;
+    public Telephone(UUID idTelephone, String telephone, String cellPhone, boolean whatsappCellPhone) {
+        this.idTelephone = idTelephone;
         this.telephone = telephone;
         this.cellPhone = cellPhone;
         this.whatsappCellPhone = whatsappCellPhone;

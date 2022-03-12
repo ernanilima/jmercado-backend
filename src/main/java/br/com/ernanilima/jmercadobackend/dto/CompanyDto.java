@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -22,7 +23,7 @@ public class CompanyDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private UUID id;
+    private UUID idCompany;
 
     @NotEmpty(message = "{empty.field}")
     @Length(min = 8, max = 50, message = "{length.field}")
@@ -34,10 +35,11 @@ public class CompanyDto implements Serializable {
 
     @NotEmpty(message = "{empty.field}")
     @Length(min = 14, max = 14, message = "{length.ein.field}")
+    @CNPJ(message = "{invalid.ein}")
     private String ein; // cnpj
 
     @NotEmpty(message = "{empty.field}")
-    @Email(message = "{email.field}")
+    @Email(message = "{invalid.email}")
     private String email;
 
     private Telephone telephone;
@@ -46,7 +48,7 @@ public class CompanyDto implements Serializable {
     private AddressDto address;
 
     public CompanyDto(Company company) {
-        this.id = company.getId();
+        this.idCompany = company.getIdCompany();
         this.companyName = company.getCompanyName();
         this.tradingName = company.getTradingName();
         this.ein = company.getEin();
@@ -60,7 +62,7 @@ public class CompanyDto implements Serializable {
      * @return Company
      */
     public Company toModel() {
-        Company company = new Company(this.id, this.companyName, this.tradingName, this.ein, this.email);
+        Company company = new Company(this.idCompany, this.companyName, this.tradingName, this.ein, this.email);
         company.setTelephone(this.telephone);
         Address address = this.address.toModel();
         address.setCompany(company);

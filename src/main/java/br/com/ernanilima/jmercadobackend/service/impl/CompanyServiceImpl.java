@@ -30,7 +30,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Company update(CompanyDto companyDto) {
+        Company companyDatabase = findById(companyDto.getIdCompany());
         Company company = companyDto.toModel();
+        company.getAddress().setIdAddress(companyDatabase.getAddress().getIdAddress());
         return insertUpdate(company);
     }
 
@@ -60,6 +62,24 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     /**
+     * Buscar uma empresa pelo id
+     * @param idCompany UUID
+     * @return Company
+     */
+    @Override
+    public Company findById(UUID idCompany) {
+        Optional<Company> model = companyRepository.findById(idCompany);
+        return model.orElseThrow(() ->
+                // cria uma mensagem de erro
+                new ObjectNotFoundException(
+                        MessageFormat.format(
+                                I18n.getMessage(I18n.NOT_FOUND_COMPANY), I18n.getClassName(Company.class.getSimpleName())
+                        )
+                )
+        );
+    }
+
+    /**
      * Buscar uma empresa pelo cnpj
      * @param ein String
      * @return Company
@@ -78,7 +98,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(UUID idCompany) {
 
     }
 }

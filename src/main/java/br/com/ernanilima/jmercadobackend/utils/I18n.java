@@ -13,6 +13,7 @@ public class I18n {
     public static final String ROLE_UPDATE = "role.update";
     public static final String ROLE_DELETE = "role.delete";
 
+    public static final String NOT_FOUND_COMPANY = "not.found.company";
     public static final String NOT_FOUND_EIN = "not.found.ein";
     public static final String NOT_FOUND_EMAIL = "not.found.email";
 

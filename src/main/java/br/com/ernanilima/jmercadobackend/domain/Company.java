@@ -27,7 +27,7 @@ public class Company implements Serializable {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Type(type = "uuid-char")
     @Column(length = 36, unique = true)
-    private UUID id;
+    private UUID idCompany;
 
     @Column(length = 50, nullable = false)
     private String companyName; // razao social
@@ -50,8 +50,8 @@ public class Company implements Serializable {
     @OneToMany(mappedBy = "company")
     private List<User> userList = new ArrayList<>();
 
-    public Company(UUID id, String companyName, String tradingName, String ein, String email) {
-        this.id = id;
+    public Company(UUID idCompany, String companyName, String tradingName, String ein, String email) {
+        this.idCompany = idCompany;
         this.companyName = companyName;
         this.tradingName = tradingName;
         this.ein = ein;

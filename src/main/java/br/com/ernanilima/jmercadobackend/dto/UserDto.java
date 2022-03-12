@@ -27,7 +27,7 @@ public class UserDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private UUID id;
+    private UUID idUser;
 
     @NotEmpty(message = "{empty.field}")
     @Length(min = 8, max = 50, message = "{length.field}")
@@ -53,7 +53,7 @@ public class UserDto implements Serializable {
     private UUID idCompany;
 
     public UserDto(User user) {
-        this.id = user.getId();
+        this.idUser = user.getIdUser();
         this.name = user.getName();
         this.email = user.getEmail();
         this.company = user.getCompany();
@@ -61,7 +61,7 @@ public class UserDto implements Serializable {
     }
 
     public void setCompany(Company company) {
-        this.idCompany = company.getId();
+        this.idCompany = company.getIdCompany();
         this.company = company;
     }
 
@@ -70,7 +70,7 @@ public class UserDto implements Serializable {
      * @return User
      */
     public User toModel() {
-        User user = new User(this.id, this.name, this.email, this.password);
+        User user = new User(this.idUser, this.name, this.email, this.password);
         user.setCompany(this.company);
         user.setPermissions(this.permissions);
         return user;

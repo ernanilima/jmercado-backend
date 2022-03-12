@@ -60,6 +60,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    @Override
+    public User findById(UUID idUser) {
+        return null;
+    }
+
     /**
      * Buscar um usuario pelo email
      * @param email String
@@ -78,7 +83,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(UUID idUser) {
 
     }
 }

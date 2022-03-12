@@ -18,7 +18,7 @@ public class AddressDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private UUID id;
+    private UUID idAddress;
 
     @NotEmpty(message = "{empty.field}")
     @Length(min = 8, max = 8, message = "{zipcode.field}")
@@ -45,7 +45,7 @@ public class AddressDto implements Serializable {
     private String complement; // complemento
 
     public AddressDto(Address address) {
-        this.id = address.getId();
+        this.idAddress = address.getIdAddress();
         this.zipCode = String.valueOf(address.getZipCode());
         this.country = address.getCountry();
         this.city = address.getCity();
@@ -61,7 +61,7 @@ public class AddressDto implements Serializable {
      * @return Address
      */
     public Address toModel() {
-        return new Address(this.id, Long.parseLong(this.zipCode), this.country, this.city, this.state, this.district,
+        return new Address(this.idAddress, Long.parseLong(this.zipCode), this.country, this.city, this.state, this.district,
                 this.street, this.number, this.complement);
     }
 }
