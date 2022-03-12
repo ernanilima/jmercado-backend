@@ -39,8 +39,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthorization(String token) {
         if (jwtUtil.isValidToken(token)) {
-            String email = jwtUtil.getUserEmail(token);
-            UserDetails user = userDetailsService.loadUserByUsername(email);
+            // busca o e-mail do usuario e o cnpj da empresa que esta no token
+            String emailAndParameter = jwtUtil.getUserEmailAndParameter(token);
+            UserDetails user = userDetailsService.loadUserByUsername(emailAndParameter); // buscar o usuario no service
             return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         }
         return null;

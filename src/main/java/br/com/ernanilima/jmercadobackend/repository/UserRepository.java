@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
+    // buscar um usuario pelo seu email e o cnpj da empresa que ele pertence
     @Transactional(readOnly = true)
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmailAndCompany_Ein(String email, String companyEin);
 }

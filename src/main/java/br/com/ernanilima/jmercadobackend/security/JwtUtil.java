@@ -21,11 +21,13 @@ public class JwtUtil {
 
     /**
      * Criar um token
+     * @param companyEin String
      * @param email String
      * @return String
      */
-    public String generateToken(String email) {
+    public String generateToken(String companyEin, String email) {
         return JWT.create()
+                .withClaim("companyEin", companyEin)
                 .withSubject(email)
                 .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
                 .sign(Algorithm.HMAC512(secretWord.getBytes()));
@@ -61,15 +63,14 @@ public class JwtUtil {
     }
 
     /**
-     * Recuperar o nome(nesse caso o email) do usuario usado para login com base no token
+     * Recupera o e-mail do usuario e o cnpj da empresa que consta no token
+     * e que foram usados na geracao do token
      * @param token String
      * @return String
      */
-    public String getUserEmail(String token) {
-        DecodedJWT claims = getDecodedJWT(token);
-        if (claims != null) {
-            return claims.getSubject();
-        }
-        return null;
+    public String getUserEmailAndParameter(String token) {
+        DecodedJWT decodedJWT = getDecodedJWT(token);
+        if (decodedJWT == null) return null;
+        return String.format("%s%s%s", decodedJWT.getSubject().trim(), "-", decodedJWT.getClaim("companyEin").asString());
     }
 }

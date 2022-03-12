@@ -9,7 +9,9 @@ import java.io.Serializable;
 public class LoginDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+
     // dados solicitados no login
+    private String companyEin; // cnpj da empresa
     private String email;
     private String password;
 }

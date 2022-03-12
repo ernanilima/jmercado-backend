@@ -3,6 +3,7 @@ package br.com.ernanilima.jmercadobackend.service.impl;
 import br.com.ernanilima.jmercadobackend.domain.User;
 import br.com.ernanilima.jmercadobackend.dto.UserDto;
 import br.com.ernanilima.jmercadobackend.repository.UserRepository;
+import br.com.ernanilima.jmercadobackend.security.UserSpringSecurity;
 import br.com.ernanilima.jmercadobackend.service.CompanyService;
 import br.com.ernanilima.jmercadobackend.service.UserService;
 import br.com.ernanilima.jmercadobackend.service.exception.DataIntegrityException;
@@ -86,13 +87,25 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Buscar um usuario pelo email
+     * Buscar um usuario pelo seu email.
+     * Realiza a busca na mesma empresa atribuida ao usuario solicitante
      * @param email String
      * @return User
      */
     @Override
     public User findByEmail(String email) {
-        Optional<User> model = userRepository.findByEmail(email);
+        return findByEmail(email, UserSpringSecurity.getAuthenticatedUser().getCompanyEin());
+    }
+
+    /**
+     * Buscar um usuario pelo seu email e o cnpj da empresa que ele pertence
+     * @param email String
+     * @param companyEin String
+     * @return User
+     */
+    @Override
+    public User findByEmail(String email, String companyEin) {
+        Optional<User> model = userRepository.findByEmailAndCompany_Ein(email, companyEin);
         return model.orElseThrow(() ->
                 new ObjectNotFoundException(
                         MessageFormat.format(

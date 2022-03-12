@@ -11,6 +11,7 @@ public interface UserService {
     User update(UserDto userDto);
     User findById(UUID idUser);
     User findByEmail(String email);
+    User findByEmail(String email, String companyEin);
     List<User> findAll();
     void delete(UUID idUser);
 }

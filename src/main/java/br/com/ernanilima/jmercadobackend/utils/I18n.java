@@ -20,6 +20,8 @@ public class I18n {
 
     public static final String INTEGRITY_IN_UP = "integrity.insert.updade";
     public static final String INTEGRITY_DELETE = "integrity.delete";
+
+    public static final String INVALID_LOGIN = "invalid.login";
 //    public static final String MESSAGE_ERROR_COUNT = "message.error.count";
 //    public static final String MESSAGE_ERROR_CEP = "message.error.cep";
 
