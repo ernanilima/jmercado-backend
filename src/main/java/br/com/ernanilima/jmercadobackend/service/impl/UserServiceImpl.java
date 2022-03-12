@@ -1,5 +1,6 @@
 package br.com.ernanilima.jmercadobackend.service.impl;
 
+import br.com.ernanilima.jmercadobackend.domain.Company;
 import br.com.ernanilima.jmercadobackend.domain.User;
 import br.com.ernanilima.jmercadobackend.dto.UserDto;
 import br.com.ernanilima.jmercadobackend.repository.UserRepository;
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
      */
     private User insertUpdate(User user) {
         try {
-            user.setCompany(companyService.findByEin(user.getCompany().getEin()));
+            user.setCompany(companyService.findById(user.getCompany().getIdCompany()));
             return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityException(

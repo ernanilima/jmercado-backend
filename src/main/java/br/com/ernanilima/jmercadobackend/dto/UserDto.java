@@ -14,6 +14,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -50,7 +51,7 @@ public class UserDto implements Serializable {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     @NotEmpty(message = "{empty.field}")
-    private UUID idCompany;
+    private String idCompany;
 
     public UserDto(User user) {
         this.idUser = user.getIdUser();
@@ -61,7 +62,7 @@ public class UserDto implements Serializable {
     }
 
     public void setCompany(Company company) {
-        this.idCompany = company.getIdCompany();
+        this.idCompany = company.getIdCompany().toString();
         this.company = company;
     }
 
