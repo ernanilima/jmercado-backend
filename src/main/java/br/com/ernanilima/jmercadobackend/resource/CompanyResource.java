@@ -48,6 +48,28 @@ public class CompanyResource {
     }
 
     /**
+     * Buscar uma empresa pelo id
+     * @param idCompany UUID
+     * @return ResponseEntity<Company>
+     */
+    @RequestMapping(value = "/{idCompany}", method = RequestMethod.GET)
+    public ResponseEntity<Company> findById(@PathVariable UUID idCompany) {
+        Company company = companyService.findById(idCompany);
+        return ResponseEntity.ok().body(company);
+    }
+
+    /**
+     * Buscar uma empresa pelo cnpj
+     * @param ein String
+     * @return ResponseEntity<Company>
+     */
+    @RequestMapping(value = "/cnpj/{ein}", method = RequestMethod.GET)
+    public ResponseEntity<Company> findByEin(@PathVariable String ein) {
+        Company company = companyService.findByEin(ein);
+        return ResponseEntity.ok().body(company);
+    }
+
+    /**
      * Buscar todas as empresas
      * @return ResponseEntity<List<CompanyDto>>
      */
@@ -58,16 +80,5 @@ public class CompanyResource {
                 .stream().map(CompanyDto::new)
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(companyDtoList);
-    }
-
-    /**
-     * Buscar uma empresa pelo cnpj
-     * @param ein String
-     * @return ResponseEntity<Company>
-     */
-    @RequestMapping(value = "/{ein}", method = RequestMethod.GET)
-    public ResponseEntity<Company> findByEin(@PathVariable String ein) {
-        Company company = companyService.findByEin(ein);
-        return ResponseEntity.ok().body(company);
     }
 }

@@ -24,21 +24,32 @@ public class UserServiceImpl implements UserService {
     @Autowired private UserRepository userRepository;
     @Autowired private CompanyService companyService;
 
+    /**
+     * Inserir um usuario
+     * @param userDto UserDto
+     * @return User
+     */
     @Override
     public User insert(UserDto userDto) {
         User user = userDto.toModel();
+        // busca a empresa que vai ser atribuida ao usuario
+        // a validacao eh realizada no metodo de busca da empresa
         user.setCompany(companyService.findById(user.getCompany().getIdCompany()));
         return insertUpdate(user);
     }
 
+    /**
+     * Atualizar um usuario
+     * @param userDto UserDto
+     * @return User
+     */
     @Override
     public User update(UserDto userDto) {
+        // busca o usuario que vai ser atualizado
         User userDatabase = findById(userDto.getIdUser());
         User user = userDto.toModel();
-
         // dados para nao atualizar
         user.setCompany(userDatabase.getCompany());
-
         return insertUpdate(user);
     }
 
@@ -66,6 +77,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    /**
+     * Busca um usuario pelo id
+     * @param idUser UUID
+     * @return User
+     */
     @Override
     public User findById(UUID idUser) {
         Optional<User> model = userRepository.findById(idUser);

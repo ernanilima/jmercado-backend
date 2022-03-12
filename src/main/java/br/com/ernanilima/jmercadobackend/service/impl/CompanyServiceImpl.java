@@ -22,16 +22,28 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
 
+    /**
+     * Inserir uma empresa
+     * @param companyDto CompanyDto
+     * @return Company
+     */
     @Override
     public Company insert(CompanyDto companyDto) {
         Company company = companyDto.toModel();
         return insertUpdate(company);
     }
 
+    /**
+     * Atualizar uma empresa
+     * @param companyDto CompanyDto
+     * @return Company
+     */
     @Override
     public Company update(CompanyDto companyDto) {
+        // busca a empresa que vai ser atualizada
         Company companyDatabase = findById(companyDto.getIdCompany());
         Company company = companyDto.toModel();
+        // atribui o id do endereco que esta vinculado
         company.getAddress().setIdAddress(companyDatabase.getAddress().getIdAddress());
         return insertUpdate(company);
     }

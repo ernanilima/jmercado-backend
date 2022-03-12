@@ -48,6 +48,28 @@ public class UserResource {
     }
 
     /**
+     * Buscar um usuario pelo id
+     * @param idUser UUID
+     * @return ResponseEntity<User>
+     */
+    @RequestMapping(value = "/{idUser}", method = RequestMethod.GET)
+    public ResponseEntity<User> findById(@PathVariable UUID idUser) {
+        User user = userService.findById(idUser);
+        return ResponseEntity.ok().body(user);
+    }
+
+    /**
+     * Buscar um usuario pelo email
+     * @param email String
+     * @return ResponseEntity<User>
+     */
+    @RequestMapping(value = "/email/{email}", method = RequestMethod.GET)
+    public ResponseEntity<User> findByEmail(@PathVariable String email) {
+        User user = userService.findByEmail(email);
+        return ResponseEntity.ok().body(user);
+    }
+
+    /**
      * Buscar todos os usuarios
      * @return ResponseEntity<List<UserDto>>
      */
@@ -58,16 +80,5 @@ public class UserResource {
                 .stream().map(UserDto::new)
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(userDtoList);
-    }
-
-    /**
-     * Buscar um usuario pelo email
-     * @param email String
-     * @return ResponseEntity<User>
-     */
-    @RequestMapping(value = "/{email}", method = RequestMethod.GET)
-    public ResponseEntity<User> findByEmail(@PathVariable String email) {
-        User user = userService.findByEmail(email);
-        return ResponseEntity.ok().body(user);
     }
 }
