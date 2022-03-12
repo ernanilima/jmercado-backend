@@ -81,4 +81,15 @@ public class UserResource {
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(userDtoList);
     }
+
+    /**
+     * Deletar um usuario
+     * @param idUser UUID
+     * @return ResponseEntity<Void>
+     */
+    @RequestMapping(value = "/{idUser}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> delete(@PathVariable UUID idUser) {
+        userService.delete(idUser);
+        return ResponseEntity.noContent().build();
+    }
 }

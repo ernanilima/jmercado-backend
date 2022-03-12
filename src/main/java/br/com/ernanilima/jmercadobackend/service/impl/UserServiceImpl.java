@@ -1,6 +1,5 @@
 package br.com.ernanilima.jmercadobackend.service.impl;
 
-import br.com.ernanilima.jmercadobackend.domain.Company;
 import br.com.ernanilima.jmercadobackend.domain.User;
 import br.com.ernanilima.jmercadobackend.dto.UserDto;
 import br.com.ernanilima.jmercadobackend.repository.UserRepository;
@@ -69,15 +68,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Buscar todos os usuarios
-     * @return List<User>
-     */
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    /**
      * Busca um usuario pelo id
      * @param idUser UUID
      * @return User
@@ -112,8 +102,23 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    /**
+     * Buscar todos os usuarios
+     * @return List<User>
+     */
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    /**
+     * Deletar um usuario
+     * @param idUser UUID
+     */
     @Override
     public void delete(UUID idUser) {
-
+        // busca antes de deletar para realizar as validacoes de existencia
+        findById(idUser);
+        userRepository.deleteById(idUser);
     }
 }
