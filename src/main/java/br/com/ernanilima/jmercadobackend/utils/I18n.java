@@ -19,8 +19,7 @@ public class I18n {
     public static final String NOT_FOUND_EMAIL = "not.found.email";
 
     public static final String INTEGRITY_IN_UP = "integrity.insert.updade";
-
-//    public static final String INTEGRITY_DELETE = "integrity.delete";
+    public static final String INTEGRITY_DELETE = "integrity.delete";
 //    public static final String MESSAGE_ERROR_COUNT = "message.error.count";
 //    public static final String MESSAGE_ERROR_CEP = "message.error.cep";
 

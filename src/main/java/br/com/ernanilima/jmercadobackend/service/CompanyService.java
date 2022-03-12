@@ -9,8 +9,8 @@ import java.util.UUID;
 public interface CompanyService {
     Company insert(CompanyDto companyDto);
     Company update(CompanyDto companyDto);
-    List<Company> findAll();
     Company findById(UUID idCompany);
     Company findByEin(String ein);
+    List<Company> findAll();
     void delete(UUID idCompany);
 }

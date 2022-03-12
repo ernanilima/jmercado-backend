@@ -81,4 +81,15 @@ public class CompanyResource {
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(companyDtoList);
     }
+
+    /**
+     * Deletar uma empresa
+     * @param idCompany UUID
+     * @return ResponseEntity<Void>
+     */
+    @RequestMapping(value = "/{idCompany}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> delete(@PathVariable UUID idCompany) {
+        companyService.delete(idCompany);
+        return ResponseEntity.noContent().build();
+    }
 }

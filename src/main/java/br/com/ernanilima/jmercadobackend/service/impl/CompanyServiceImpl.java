@@ -65,15 +65,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     /**
-     * Buscar todas as empresas
-     * @return List<Company>
-     */
-    @Override
-    public List<Company> findAll() {
-        return companyRepository.findAll();
-    }
-
-    /**
      * Buscar uma empresa pelo id
      * @param idCompany UUID
      * @return Company
@@ -109,8 +100,29 @@ public class CompanyServiceImpl implements CompanyService {
         );
     }
 
+    /**
+     * Buscar todas as empresas
+     * @return List<Company>
+     */
+    @Override
+    public List<Company> findAll() {
+        return companyRepository.findAll();
+    }
+
+    /**
+     * Deletar uma empresa
+     * @param idCompany UUID
+     */
     @Override
     public void delete(UUID idCompany) {
-
+        try {
+            // busca antes de deletar para realizar as validacoes de existencia
+            findById(idCompany);
+            companyRepository.deleteById(idCompany);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException(
+                    MessageFormat.format(I18n.getMessage(I18n.INTEGRITY_DELETE), I18n.getClassName(Company.class.getSimpleName()))
+            );
+        }
     }
 }
