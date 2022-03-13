@@ -11,6 +11,7 @@ import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundExcepti
 import br.com.ernanilima.jmercadobackend.utils.I18n;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -21,8 +22,10 @@ import java.util.UUID;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired private UserRepository userRepository;
-    @Autowired private CompanyService companyService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CompanyService companyService;
 
     /**
      * Inserir um usuario

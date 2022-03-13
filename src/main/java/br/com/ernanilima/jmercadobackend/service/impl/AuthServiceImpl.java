@@ -13,6 +13,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -20,15 +22,26 @@ public class AuthServiceImpl implements AuthService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private HttpServletResponse res;
 
     @Override
     @Transactional(readOnly = true)
     public TokenDto login(LoginDto loginDto) {
         try {
+            // obitem os dados para realizar o login
             UsernamePasswordAuthenticationToken authToken = getAuthentication(loginDto);
+            // usa o "UserDetailsService" para verificar se o login eh valido
             authenticationManager.authenticate(authToken);
-            String token = jwtUtil.generateToken(loginDto.getCompanyEin(), loginDto.getEmail());
-            return new TokenDto(loginDto.getEmail(), token);
+            // se a autenticação for realizada
+            String token = ("Bearer " + jwtUtil.generateToken(loginDto.getCompanyEin(), loginDto.getEmail()));
+
+            // envia o token no cabecalho
+            res.addHeader("Authorization", token);
+            res.addHeader("access-control-expose-headers", "Authorization");
+
+            // envia o token no dto
+            return new TokenDto(loginDto. getCompanyEin(), loginDto.getEmail(), token);
         } catch (AuthenticationException e) {
             throw new JwtAuthenticationException(I18n.getMessage(I18n.BAD_CREDENTIALS));
         }

@@ -17,6 +17,7 @@ public class TokenDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    private String companyEin; // cnpj da empresa
     private String email;
     private String token;
 }
