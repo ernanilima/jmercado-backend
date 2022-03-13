@@ -1,6 +1,5 @@
 package br.com.ernanilima.jmercadobackend.config;
 
-import br.com.ernanilima.jmercadobackend.security.JwtAuthenticationFilter;
 import br.com.ernanilima.jmercadobackend.security.JwtAuthorizationFilter;
 import br.com.ernanilima.jmercadobackend.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,26 +10,25 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 
 /**
  * WebSecurityConfigurerAdapter foi 'descontinuado', no link demonstra como alterar
  * {@link <a href="https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter"></a>}
+ * As solucoes de alteracoes ainda estao incompletas, implementar a alteracao no futuro
  */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig implements WebMvcConfigurer {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private Environment environment;
@@ -40,10 +38,10 @@ public class SecurityConfig implements WebMvcConfigurer {
     private JwtUtil jwtUtil;
 
     // endpoints publicos
-    private static final String[] PUBLIC_PATHS = { "/h2-console/**" };
+    private static final String[] PUBLIC_PATHS = {"/auth/**", "/h2-console/**"};
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
         // se estiver no perfil "test", garante que o h2-console será exibido
         if (Arrays.asList(environment.getActiveProfiles()).contains("test"))
             http.headers().frameOptions().disable();
@@ -62,10 +60,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         // garante que nenhuma sessão de usuário será criada
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // adiciona o dls que contem os filtros
-        http.apply(new CustomDsl().customDsl());
-
-        return http.build();
+        // adiciona um filtro de autorizacao
+        http.addFilter(new JwtAuthorizationFilter(authenticationManagerBean(), userDetailsService, jwtUtil));
     }
 
     @Bean
@@ -79,24 +75,22 @@ public class SecurityConfig implements WebMvcConfigurer {
         return source;
     }
 
+    /**
+     * Bean para transformar a senha em sha 512
+     * @return BCryptPasswordEncoder
+     */
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     /**
-     * Classe para inserir os filtros
+     * Bean para gerenciar a validacao
+     * @return AuthenticationManager
      */
-    public class CustomDsl extends AbstractHttpConfigurer<CustomDsl, HttpSecurity> {
-        @Override
-        public void configure(HttpSecurity http) throws Exception {
-            AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-            http.addFilter(new JwtAuthenticationFilter(authenticationManager, jwtUtil));
-            http.addFilter(new JwtAuthorizationFilter(authenticationManager, userDetailsService, jwtUtil));
-        }
-
-        public CustomDsl customDsl() {
-            return this;
-        }
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }
