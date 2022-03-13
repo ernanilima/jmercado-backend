@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.Instant;
 
 /**
  * Modelo padrao do erro para exibir
@@ -19,7 +20,7 @@ public class StandardError implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private Long timestamp;
+    private Instant timestamp;
     private Integer status;
     private String error;
     private String message;

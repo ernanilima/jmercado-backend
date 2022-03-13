@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 
 /**
  * Manipulador de erros.
@@ -28,7 +29,7 @@ public class ResourceExceptionHandler {
     public ResponseEntity<StandardError> argumentNotValid(MethodArgumentNotValidException e, HttpServletRequest r) {
         String message = "Quantidade de erro(s): " + e.getErrorCount();
         ValidationError validarErro = new ValidationError(
-                System.currentTimeMillis(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação", message, r.getRequestURI());
+                Instant.now(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação", message, r.getRequestURI());
 
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
             validarErro.addError(fieldError.getField(), fieldError.getDefaultMessage());
@@ -46,7 +47,7 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(DataIntegrityException.class)
     public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException e, HttpServletRequest r) {
         StandardError standardError = new StandardError(
-                System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Integridade de dados", e.getMessage(), r.getRequestURI());
+                Instant.now(), HttpStatus.BAD_REQUEST.value(), "Integridade de dados", e.getMessage(), r.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
     }
 
@@ -60,7 +61,7 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest r) {
         StandardError standardError = new StandardError(
-                System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), "Não encontrado", e.getMessage(), r.getRequestURI());
+                Instant.now(), HttpStatus.NOT_FOUND.value(), "Não encontrado", e.getMessage(), r.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(standardError);
     }
 
@@ -73,7 +74,7 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(JwtAuthenticationException.class)
     public ResponseEntity<StandardError> jwtAuthentication(JwtAuthenticationException e, HttpServletRequest r) {
         StandardError standardError = new StandardError(
-                System.currentTimeMillis(), HttpStatus.UNAUTHORIZED.value(), "Erro de autenticação", e.getMessage(), r.getRequestURI());
+                Instant.now(), HttpStatus.UNAUTHORIZED.value(), "Erro de autenticação", e.getMessage(), r.getRequestURI());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(standardError);
     }
 }

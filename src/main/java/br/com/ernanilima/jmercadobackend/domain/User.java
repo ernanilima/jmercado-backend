@@ -11,10 +11,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -47,8 +44,13 @@ public class User implements Serializable {
     private Company company;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "permissions")
-    private Set<Integer> permissions =  new HashSet<>();
+    @CollectionTable(
+            name = "userpermission",
+            joinColumns=@JoinColumn(name = "idUser")
+    )
+    @MapKeyColumn(name = "permission_key")
+    @Column(name="role")
+    private Map<Integer, String> permissions =  new HashMap<>();
 
     public User() {
         // permissao de leitura
@@ -67,11 +69,11 @@ public class User implements Serializable {
 
     public Set<Permission> getPermissions() {
         // retorna as permissoes com base no codigo
-        return permissions.stream().map(Permissions::toEnum).collect(Collectors.toSet());
+        return this.permissions.keySet().stream().map(Permissions::toEnum).collect(Collectors.toSet());
     }
 
     public void setPermissions(List<Permission> permissions) {
         // adiciona o codigo da permissao
-        this.permissions.addAll(permissions.stream().map(Permission::getId).collect(Collectors.toSet()));
+        this.permissions.putAll(permissions.stream().collect(Collectors.toMap(Permission::getId, Permission::getRole)));
     }
 }
