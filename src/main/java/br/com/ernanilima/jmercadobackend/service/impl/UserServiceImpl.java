@@ -26,6 +26,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private CompanyService companyService;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     /**
      * Inserir um usuario
@@ -35,6 +37,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User insert(UserDto userDto) {
         User user = userDto.toModel();
+        // codificar senha
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         // busca a empresa que vai ser atribuida ao usuario
         // a validacao eh realizada no metodo de busca da empresa
         user.setCompany(companyService.findById(user.getCompany().getIdCompany()));
