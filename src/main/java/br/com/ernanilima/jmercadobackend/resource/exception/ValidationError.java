@@ -1,7 +1,6 @@
 package br.com.ernanilima.jmercadobackend.resource.exception;
 
 import java.io.Serial;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class ValidationError extends StandardError {
 
     private final List<FieldErrorMessage> errors = new ArrayList<>();
 
-    public ValidationError(Instant timestamp, Integer status, String error, String message, String path) {
+    public ValidationError(String timestamp, Integer status, String error, String message, String path) {
         super(timestamp, status, error, message, path);
     }
 
