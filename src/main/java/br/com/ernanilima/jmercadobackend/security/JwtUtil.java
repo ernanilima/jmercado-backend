@@ -40,13 +40,13 @@ public class JwtUtil {
      */
     public boolean isValidToken(String token) {
         DecodedJWT decodedJWT = getDecodedJWT(token);
-        if (decodedJWT != null) {
-            String email = decodedJWT.getSubject();
-            Date expirationDate = decodedJWT.getExpiresAt();
-            Date currentDate = new Date(System.currentTimeMillis());
-            return (email != null && expirationDate != null && currentDate.before(expirationDate));
-        }
-        return false;
+        if (decodedJWT == null) return false;
+
+        String companyEin = decodedJWT.getClaim("companyEin").asString();
+        String email = decodedJWT.getSubject();
+        Date expirationDate = decodedJWT.getExpiresAt();
+        Date currentDate = new Date(System.currentTimeMillis());
+        return (companyEin != null && email != null && expirationDate != null && currentDate.before(expirationDate));
     }
 
     /**
@@ -71,6 +71,7 @@ public class JwtUtil {
     public String getUserEmailAndParameter(String token) {
         DecodedJWT decodedJWT = getDecodedJWT(token);
         if (decodedJWT == null) return null;
+
         return String.format("%s%s%s", decodedJWT.getSubject().trim(), "-", decodedJWT.getClaim("companyEin").asString());
     }
 }

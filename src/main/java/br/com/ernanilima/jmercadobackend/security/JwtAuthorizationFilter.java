@@ -32,18 +32,18 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // o cabeçalho existe e começa com o valor 'Bearer '
         if (headerAuthorization != null && headerAuthorization.startsWith("Bearer ")) {
             UsernamePasswordAuthenticationToken auth = getAuthorization(headerAuthorization.substring(7));
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            if (auth != null)
+                SecurityContextHolder.getContext().setAuthentication(auth);
         }
         chain.doFilter(request, response);
     }
 
     private UsernamePasswordAuthenticationToken getAuthorization(String token) {
-        if (jwtUtil.isValidToken(token)) {
-            // busca o e-mail do usuario e o cnpj da empresa que esta no token
-            String emailAndParameter = jwtUtil.getUserEmailAndParameter(token);
-            UserDetails user = userDetailsService.loadUserByUsername(emailAndParameter); // buscar o usuario no service
-            return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-        }
-        return null;
+        if (!jwtUtil.isValidToken(token)) return null;
+
+        // busca o e-mail do usuario e o cnpj da empresa que esta no token
+        String emailAndParameter = jwtUtil.getUserEmailAndParameter(token);
+        UserDetails user = userDetailsService.loadUserByUsername(emailAndParameter); // buscar o usuario no service
+        return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
     }
 }

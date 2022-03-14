@@ -1,5 +1,6 @@
 package br.com.ernanilima.jmercadobackend.config;
 
+import br.com.ernanilima.jmercadobackend.resource.exception.JwtAccessDeniedHandler;
 import br.com.ernanilima.jmercadobackend.security.JwtAuthorizationFilter;
 import br.com.ernanilima.jmercadobackend.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     // endpoints publicos
     private static final String[] PUBLIC_PATHS = {"/auth/**", "/h2-console/**"};
@@ -62,6 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // adiciona um filtro de autorizacao
         http.addFilter(new JwtAuthorizationFilter(authenticationManagerBean(), userDetailsService, jwtUtil));
+        // classe para exibir erro para nao autorizado
+        http.exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler);
     }
 
     @Bean
