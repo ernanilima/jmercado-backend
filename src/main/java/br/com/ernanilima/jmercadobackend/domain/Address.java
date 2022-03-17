@@ -1,6 +1,7 @@
 package br.com.ernanilima.jmercadobackend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,16 +9,19 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "address")
-public class Address implements Serializable {
+public class Address implements IEntityLog, Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -52,10 +56,18 @@ public class Address implements Serializable {
     @Column(length = 50)
     private String complement; // complemento
 
+    @EqualsAndHashCode.Exclude
     @JsonIgnore
     @OneToOne
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @EqualsAndHashCode.Exclude
+    @NotNull
+    private Timestamp dateInsert;
+    @EqualsAndHashCode.Exclude
+    @NotNull
+    private Timestamp dateUpdate;
 
     public Address(UUID idAddress, long zipCode, String country, String city, String state, String district, String street, String number, String complement) {
         this.idAddress = idAddress;

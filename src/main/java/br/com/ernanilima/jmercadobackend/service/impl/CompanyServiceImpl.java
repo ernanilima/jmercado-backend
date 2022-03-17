@@ -6,6 +6,7 @@ import br.com.ernanilima.jmercadobackend.repository.CompanyRepository;
 import br.com.ernanilima.jmercadobackend.service.CompanyService;
 import br.com.ernanilima.jmercadobackend.service.exception.DataIntegrityException;
 import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundException;
+import br.com.ernanilima.jmercadobackend.service.logging.LogToEntity;
 import br.com.ernanilima.jmercadobackend.utils.I18n;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,6 +31,9 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company insert(CompanyDto companyDto) {
         Company company = companyDto.toModel();
+        LogToEntity.toInsert(company);
+        LogToEntity.toInsert(company.getAddress());
+        LogToEntity.toInsert(company.getTelephone());
         return insertUpdate(company);
     }
 
@@ -43,9 +47,52 @@ public class CompanyServiceImpl implements CompanyService {
         // busca a empresa que vai ser atualizada
         Company companyDatabase = findById(companyDto.getIdCompany());
         Company company = companyDto.toModel();
-        // atribui o id do endereco que esta vinculado
-        company.getAddress().setIdAddress(companyDatabase.getAddress().getIdAddress());
+
+        validationForUpdate(companyDatabase, company);
         return insertUpdate(company);
+    }
+
+    /**
+     * Realiza a atualizacao dos dados para log na tabela
+     * @param oldCompany Company
+     * @param newCompany Company
+     */
+    private void validationForUpdate(Company oldCompany, Company newCompany) {
+        if (oldCompany != null && oldCompany.equals(newCompany)) {
+            // vai atualizar outra tabela
+            LogToEntity.dontUpdate(oldCompany, newCompany);
+        } else {
+            // vai atualizar algum dado da empresa
+            LogToEntity.toUpdate(oldCompany, newCompany);
+        }
+
+        if (oldCompany != null && oldCompany.getAddress() != null && newCompany != null && newCompany.getAddress() != null) {
+            // ja tem emdereco vinculado
+            newCompany.getAddress().setIdAddress(oldCompany.getAddress().getIdAddress());
+            if (oldCompany.getAddress().equals(newCompany.getAddress()))
+                // vai atualizar outra tabela
+                LogToEntity.dontUpdate(oldCompany.getAddress(), newCompany.getAddress());
+            else
+                // vai atualizar algum dado do endereco
+                LogToEntity.toUpdate(oldCompany.getAddress(), newCompany.getAddress());
+        } else if (newCompany != null && newCompany.getAddress() != null) {
+            // ainda nao tem endereco mas foi recebido um para ser vinculado
+            LogToEntity.toInsert(newCompany.getAddress());
+        }
+
+        if (oldCompany != null && oldCompany.getTelephone() != null && newCompany != null && newCompany.getTelephone() != null) {
+            // ja tem telefone vinculado
+            newCompany.getTelephone().setIdTelephone(oldCompany.getTelephone().getIdTelephone());
+            if (oldCompany.getTelephone().equals(newCompany.getTelephone()))
+                // vai atualizar outra tabela
+                LogToEntity.dontUpdate(oldCompany.getTelephone(), newCompany.getTelephone());
+            else
+                // vai atualizar algum dado do telefone
+                LogToEntity.toUpdate(oldCompany.getTelephone(), newCompany.getTelephone());
+        } else if (newCompany != null && newCompany.getTelephone() != null) {
+            // ainda nao tem telefone mas foi recebido um para ser vinculado
+            LogToEntity.toInsert(newCompany.getTelephone());
+        }
     }
 
     /**

@@ -3,22 +3,26 @@ package br.com.ernanilima.jmercadobackend.domain;
 import br.com.ernanilima.jmercadobackend.domain.permission.Permission;
 import br.com.ernanilima.jmercadobackend.domain.permission.Permissions;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "`user`")
-public class User implements Serializable {
+public class User implements IEntityLog, Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -39,6 +43,7 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String password;
 
+    @EqualsAndHashCode.Exclude
     @JsonIgnore
     @ManyToOne
     private Company company;
@@ -51,6 +56,13 @@ public class User implements Serializable {
     @MapKeyColumn(name = "permission_key")
     @Column(name="role")
     private Map<Integer, String> permissions =  new HashMap<>();
+
+    @EqualsAndHashCode.Exclude
+    @NotNull
+    private Timestamp dateInsert;
+    @EqualsAndHashCode.Exclude
+    @NotNull
+    private Timestamp dateUpdate;
 
     public User() {
         // permissao de leitura

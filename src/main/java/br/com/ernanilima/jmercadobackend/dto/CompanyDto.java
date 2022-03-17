@@ -42,7 +42,8 @@ public class CompanyDto implements Serializable {
     @Email(message = "{invalid.email}")
     private String email;
 
-    private Telephone telephone;
+    @Valid
+    private TelephoneDto telephone;
 
     @Valid
     private AddressDto address;
@@ -53,8 +54,10 @@ public class CompanyDto implements Serializable {
         this.tradingName = company.getTradingName();
         this.ein = company.getEin();
         this.email = company.getEmail();
-        this.telephone = company.getTelephone();
-        this.address = new AddressDto(company.getAddress());
+        if (company.getTelephone() != null)
+            this.telephone = new TelephoneDto(company.getTelephone());
+        if (company.getAddress() != null)
+            this.address = new AddressDto(company.getAddress());
     }
 
     /**
@@ -63,10 +66,16 @@ public class CompanyDto implements Serializable {
      */
     public Company toModel() {
         Company company = new Company(this.idCompany, this.companyName, this.tradingName, this.ein, this.email);
-        company.setTelephone(this.telephone);
-        Address address = this.address.toModel();
-        address.setCompany(company);
-        company.setAddress(address);
+        if (this.telephone != null) {
+            Telephone telephone = this.telephone.toModel();
+            telephone.setCompany(company);
+            company.setTelephone(telephone);
+        }
+        if (this.address != null) {
+            Address address = this.address.toModel();
+            address.setCompany(company);
+            company.setAddress(address);
+        }
         return company;
     }
 }
