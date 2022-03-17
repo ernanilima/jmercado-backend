@@ -50,6 +50,7 @@ public class UserDto implements Serializable {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     @NotEmpty(message = "{empty.field}")
+    @Length(min = 36, max = 36, message = "{length.min.field}")
     private String idCompany;
 
     public UserDto(User user) {

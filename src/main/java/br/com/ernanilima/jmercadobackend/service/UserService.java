@@ -1,6 +1,7 @@
 package br.com.ernanilima.jmercadobackend.service;
 
 import br.com.ernanilima.jmercadobackend.domain.User;
+import br.com.ernanilima.jmercadobackend.dto.UserChangePasswordDto;
 import br.com.ernanilima.jmercadobackend.dto.UserDto;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface UserService {
     User findByEmail(String email, String companyEin);
     List<User> findAll();
     void delete(UUID idUser);
+    void changePassword(UserChangePasswordDto userChangePasswordDto);
 }

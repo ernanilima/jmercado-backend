@@ -1,5 +1,6 @@
 package br.com.ernanilima.jmercadobackend.resource.exception;
 
+import br.com.ernanilima.jmercadobackend.service.exception.ChangePasswordException;
 import br.com.ernanilima.jmercadobackend.service.exception.DataIntegrityException;
 import br.com.ernanilima.jmercadobackend.service.exception.JwtAuthenticationException;
 import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundException;
@@ -126,6 +127,20 @@ public class ResourceExceptionHandler {
         StandardError standardError = new StandardError(
                 ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT),
                 HttpStatus.UNAUTHORIZED.value(), "Erro de autenticação", e.getMessage(), r.getRequestURI());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(standardError);
+    }
+
+    /**
+     * Senha do usuario nao pode ser alterada
+     * @param e ChangePasswordException
+     * @param r HttpServletRequest
+     * @return ResponseEntity<StandardError>
+     */
+    @ExceptionHandler(ChangePasswordException.class)
+    public ResponseEntity<StandardError> changePassword(ChangePasswordException e, HttpServletRequest r) {
+        StandardError standardError = new StandardError(
+                ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT),
+                HttpStatus.UNAUTHORIZED.value(), "Erro de autorização", e.getMessage(), r.getRequestURI());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(standardError);
     }
 }

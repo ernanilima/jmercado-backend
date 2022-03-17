@@ -34,7 +34,7 @@ public class CompanyDto implements Serializable {
     private String tradingName; // nome fantasia
 
     @NotEmpty(message = "{empty.field}")
-    @Length(min = 14, max = 14, message = "{length.ein.field}")
+    @Length(min = 14, max = 14, message = "{length.min.field}")
     @CNPJ(message = "{invalid.ein}")
     private String ein; // cnpj
 

@@ -1,11 +1,13 @@
 package br.com.ernanilima.jmercadobackend.service.impl;
 
 import br.com.ernanilima.jmercadobackend.domain.User;
+import br.com.ernanilima.jmercadobackend.dto.UserChangePasswordDto;
 import br.com.ernanilima.jmercadobackend.dto.UserDto;
 import br.com.ernanilima.jmercadobackend.repository.UserRepository;
 import br.com.ernanilima.jmercadobackend.security.UserSpringSecurity;
 import br.com.ernanilima.jmercadobackend.service.CompanyService;
 import br.com.ernanilima.jmercadobackend.service.UserService;
+import br.com.ernanilima.jmercadobackend.service.exception.ChangePasswordException;
 import br.com.ernanilima.jmercadobackend.service.exception.DataIntegrityException;
 import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundException;
 import br.com.ernanilima.jmercadobackend.service.logging.LogToEntity;
@@ -155,5 +157,31 @@ public class UserServiceImpl implements UserService {
         // busca antes de deletar para realizar as validacoes de existencia
         findById(idUser);
         userRepository.deleteById(idUser);
+    }
+
+    /**
+     * Alterar a senha do usuario
+     * @param userChangePasswordDto UserChangePasswordDto
+     */
+    @Override
+    public void changePassword(UserChangePasswordDto userChangePasswordDto) {
+        // senhas novas combinarem
+        if (userChangePasswordDto.getNewPassword1().equals(userChangePasswordDto.getNewPassword2())) {
+            // busca um usuario com base no e-mail que contem no token
+            User userDatabase = findByEmail(UserSpringSecurity.getAuthenticatedUser().getUsername());
+            // senha atual que foi recebida eh a mesma que consta no banco de dados
+            // basicamente confirma que o usuario que esta solicitando a alteracao sabe a senha atual
+            if (userDatabase != null && passwordEncoder.matches(userChangePasswordDto.getOldPassword(), userDatabase.getPassword())) {
+                // muda a senha do usuario
+                userDatabase.setPassword(passwordEncoder.encode(userChangePasswordDto.getNewPassword1()));
+                // atualiza o log
+                LogToEntity.toUpdate(userDatabase, userDatabase);
+                insertUpdate(userDatabase);
+            } else {
+                throw new ChangePasswordException("Dados inválidos para a alteração");
+            }
+        } else {
+            throw new ChangePasswordException("Senhas não combinam");
+        }
     }
 }

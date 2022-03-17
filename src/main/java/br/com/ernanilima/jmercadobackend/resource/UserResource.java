@@ -1,6 +1,7 @@
 package br.com.ernanilima.jmercadobackend.resource;
 
 import br.com.ernanilima.jmercadobackend.domain.User;
+import br.com.ernanilima.jmercadobackend.dto.UserChangePasswordDto;
 import br.com.ernanilima.jmercadobackend.dto.UserDto;
 import br.com.ernanilima.jmercadobackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,17 @@ public class UserResource {
     @RequestMapping(value = "/{idUser}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable UUID idUser) {
         userService.delete(idUser);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Alterar a senha de um usuario
+     * @param userChangePasswordDto UserChangePasswordDto
+     * @return ResponseEntity<Void>
+     */
+    @RequestMapping(value = "/change-password", method = RequestMethod.PUT)
+    public ResponseEntity<Void> changePassword(@Valid @RequestBody UserChangePasswordDto userChangePasswordDto) {
+        userService.changePassword(userChangePasswordDto);
         return ResponseEntity.noContent().build();
     }
 }
