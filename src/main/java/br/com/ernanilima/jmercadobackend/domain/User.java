@@ -81,7 +81,7 @@ public class User implements IEntityLog, Serializable {
 
     public Set<Permission> getPermissions() {
         // retorna as permissoes com base no codigo
-        return this.permissions.keySet().stream().map(Permissions::toEnum).collect(Collectors.toSet());
+        return permissions.keySet().stream().map(Permissions::toEnum).collect(Collectors.toSet());
     }
 
     public void setPermissions(List<Permission> permissions) {

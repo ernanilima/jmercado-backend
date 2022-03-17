@@ -47,7 +47,7 @@ public class CompanyServiceImpl implements CompanyService {
         // busca a empresa que vai ser atualizada
         Company companyDatabase = findById(companyDto.getIdCompany());
         Company company = companyDto.toModel();
-
+        // validar dados para registar log
         validationForUpdate(companyDatabase, company);
         return insertUpdate(company);
     }

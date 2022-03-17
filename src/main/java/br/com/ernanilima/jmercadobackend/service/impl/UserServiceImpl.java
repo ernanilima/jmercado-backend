@@ -8,6 +8,7 @@ import br.com.ernanilima.jmercadobackend.service.CompanyService;
 import br.com.ernanilima.jmercadobackend.service.UserService;
 import br.com.ernanilima.jmercadobackend.service.exception.DataIntegrityException;
 import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundException;
+import br.com.ernanilima.jmercadobackend.service.logging.LogToEntity;
 import br.com.ernanilima.jmercadobackend.utils.I18n;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -40,8 +41,9 @@ public class UserServiceImpl implements UserService {
         // codificar senha
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // busca a empresa que vai ser atribuida ao usuario
-        // a validacao eh realizada no metodo de busca da empresa
+        // a validacao de existencia eh realizada no metodo de busca da empresa
         user.setCompany(companyService.findById(user.getCompany().getIdCompany()));
+        LogToEntity.toInsert(user);
         return insertUpdate(user);
     }
 
@@ -56,8 +58,21 @@ public class UserServiceImpl implements UserService {
         User userDatabase = findById(userDto.getIdUser());
         User user = userDto.toModel();
         // dados para nao atualizar
+        user.setPassword(userDatabase.getPassword());
         user.setCompany(userDatabase.getCompany());
+        // validar dados para registar log
+        validationForUpdate(userDatabase, user);
         return insertUpdate(user);
+    }
+
+    private void validationForUpdate(User oldUser, User newUser) {
+        if (oldUser != null && oldUser.equals(newUser)) {
+            // vai atualizar outra tabela
+            LogToEntity.dontUpdate(oldUser, newUser);
+        } else {
+            // vai atualizar algum dado do usuario
+            LogToEntity.toUpdate(oldUser, newUser);
+        }
     }
 
     /**

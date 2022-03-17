@@ -14,7 +14,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -42,7 +41,7 @@ public class UserDto implements Serializable {
     @Length(min = 6, max = 15, message = "{length.field}")
     private String password; // nao exibe no get
 
-    @JsonIgnoreProperties({"userList", "telephone", "address"})
+    @JsonIgnoreProperties({"userList", "telephone", "address", "dateInsert", "dateUpdate"})
     private Company company;
 
     @NotNull(message = "{empty.field}")
@@ -58,7 +57,7 @@ public class UserDto implements Serializable {
         this.name = user.getName();
         this.email = user.getEmail();
         this.company = user.getCompany();
-        this.permissions = user.getPermissions().stream().map(e -> Permissions.toEnum(e.getId())).collect(Collectors.toList());
+        this.permissions = user.getPermissions().stream().map(p -> Permissions.toEnum(p.getId())).collect(Collectors.toList());
     }
 
     public void setCompany(Company company) {
@@ -73,7 +72,7 @@ public class UserDto implements Serializable {
     public User toModel() {
         User user = new User(this.idUser, this.name, this.email, this.password);
         user.setCompany(this.company);
-        user.setPermissions(this.permissions);
+        user.setPermissions(this.permissions.stream().map(p -> Permissions.toEnum(p.getId())).collect(Collectors.toList()));
         return user;
     }
 }
