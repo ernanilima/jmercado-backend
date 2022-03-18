@@ -8,10 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Component
@@ -22,11 +20,11 @@ public class SupportUser implements Serializable {
     private final Integer id = Permissions.SUPPORT.getId();
     private final String description = Permissions.SUPPORT.getDescription();
     private final String email = "support@ernanilima.com.br";
-    private final Set<Permission> permissions = new HashSet<>(Collections.singletonList(Permissions.toEnum(getId())));
+    private final Set<Permission> permissions = new HashSet<>(Arrays.stream(Permissions.values()).map(p -> Permissions.toEnum(p.getId())).collect(Collectors.toSet()));
 
     public User getSupportUser() {
-        User user = new User(null, getDescription(), getEmail(), null);
-        user.setPermissions(List.of(Permissions.toEnum(getId())));
+        User user = new User(UUID.randomUUID(), getDescription(), getEmail(), null);
+        user.setPermissions(permissions.stream().toList());
         return user;
     }
 

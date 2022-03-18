@@ -5,6 +5,7 @@ import br.com.ernanilima.jmercadobackend.dto.CompanyDto;
 import br.com.ernanilima.jmercadobackend.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,9 +29,9 @@ public class CompanyResource {
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> insert(@Valid @RequestBody CompanyDto companyDto) {
-        companyService.insert(companyDto);
+        Company company = companyService.insert(companyDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(companyDto.getIdCompany()).toUri();
+                .path("/{idCompany}").buildAndExpand(company.getIdCompany().toString()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
@@ -40,6 +41,7 @@ public class CompanyResource {
      * @param idCompany UUID
      * @return ResponseEntity<Void>
      */
+    @PreAuthorize("hasAnyRole('UPDATE')")
     @RequestMapping(value = "/{idCompany}", method = RequestMethod.PUT)
     public ResponseEntity<Void> update(@Valid @RequestBody CompanyDto companyDto, @PathVariable UUID idCompany) {
         companyDto.setIdCompany(idCompany);
@@ -50,29 +52,32 @@ public class CompanyResource {
     /**
      * Buscar uma empresa pelo id
      * @param idCompany UUID
-     * @return ResponseEntity<Company>
+     * @return ResponseEntity<CompanyDto>
      */
+    @PreAuthorize("hasAnyRole('FIND')")
     @RequestMapping(value = "/{idCompany}", method = RequestMethod.GET)
-    public ResponseEntity<Company> findById(@PathVariable UUID idCompany) {
+    public ResponseEntity<CompanyDto> findById(@PathVariable UUID idCompany) {
         Company company = companyService.findById(idCompany);
-        return ResponseEntity.ok().body(company);
+        return ResponseEntity.ok().body(new CompanyDto(company));
     }
 
     /**
      * Buscar uma empresa pelo cnpj
      * @param ein String
-     * @return ResponseEntity<Company>
+     * @return ResponseEntity<CompanyDto>
      */
+    @PreAuthorize("hasAnyRole('FIND')")
     @RequestMapping(value = "/cnpj/{ein}", method = RequestMethod.GET)
-    public ResponseEntity<Company> findByEin(@PathVariable String ein) {
+    public ResponseEntity<CompanyDto> findByEin(@PathVariable String ein) {
         Company company = companyService.findByEin(ein);
-        return ResponseEntity.ok().body(company);
+        return ResponseEntity.ok().body(new CompanyDto(company));
     }
 
     /**
      * Buscar todas as empresas
      * @return ResponseEntity<List<CompanyDto>>
      */
+    @PreAuthorize("hasAnyRole('SUPPORT')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<CompanyDto>> findAll() {
         List<Company> companyList = companyService.findAll();
@@ -87,6 +92,7 @@ public class CompanyResource {
      * @param idCompany UUID
      * @return ResponseEntity<Void>
      */
+    @PreAuthorize("hasAnyRole('SUPPORT')")
     @RequestMapping(value = "/{idCompany}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable UUID idCompany) {
         companyService.delete(idCompany);
