@@ -8,10 +8,24 @@ import java.util.ResourceBundle;
 public class I18n {
 
     public static final String ROLE_SUPPORT = "role.support";
-    public static final String ROLE_FIND = "role.find";
-    public static final String ROLE_INSERT = "role.insert";
-    public static final String ROLE_UPDATE = "role.update";
-    public static final String ROLE_DELETE = "role.delete";
+    public static final String ROLE_USER = "role.user";
+    public static final String ROLE_MENU_REGISTRATION = "role.menu.registration";
+    public static final String ROLE_MENU_REGISTRATION_FOR_USER = "role.menu.registration.for.user";
+    public static final String ROLE_MENU_REGISTRATION_USER = "role.menu.registration.user";
+    public static final String ROLE_REGISTRATION_USER_FIND = "role.user.find";
+    public static final String ROLE_REGISTRATION_USER_INSERT = "role.user.insert";
+    public static final String ROLE_REGISTRATION_USER_UPDATE = "role.user.update";
+    public static final String ROLE_REGISTRATION_USER_DELETE = "role.user.delete";
+    public static final String ROLE_MENU_REGISTRATION_USER_GROUP = "role.menu.registration.user.group";
+    public static final String ROLE_REGISTRATION_USER_GROUP_FIND = "role.user.group.find";
+    public static final String ROLE_REGISTRATION_USER_GROUP_INSERT = "role.user.group.insert";
+    public static final String ROLE_REGISTRATION_USER_GROUP_UPDATE = "role.user.group.update";
+    public static final String ROLE_REGISTRATION_USER_GROUP_DELETE = "role.user.group.delete";
+    public static final String ROLE_MENU_REGISTRATION_COMPANY = "role.menu.registration.company";
+    public static final String ROLE_REGISTRATION_COMPANY_FIND = "role.company.find";
+    public static final String ROLE_REGISTRATION_COMPANY_INSERT = "role.company.insert";
+    public static final String ROLE_REGISTRATION_COMPANY_UPDATE = "role.company.update";
+    public static final String ROLE_REGISTRATION_COMPANY_DELETE = "role.company.delete";
 
     public static final String NOT_FOUND_COMPANY = "not.found.company";
     public static final String NOT_FOUND_EIN = "not.found.ein";

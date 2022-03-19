@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -45,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // endpoints publicos
     private static final String[] PUBLIC_PATHS = {"/auth/**", "/h2-console/**"};
+    private static final String[] PUBLIC_POST = {"/empresa"};
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -60,6 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // permite tudo na variavel 'PUBLIC_PATHS'
                 .antMatchers(PUBLIC_PATHS).permitAll()
+                .antMatchers(HttpMethod.POST, PUBLIC_POST).permitAll()
                 // solicita autenticação para o resto
                 .anyRequest().authenticated();
 

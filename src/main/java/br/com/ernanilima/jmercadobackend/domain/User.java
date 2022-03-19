@@ -66,7 +66,7 @@ public class User implements IEntityLog, Serializable {
 
     public User() {
         // permissao de leitura
-        this.setPermissions(List.of(Permissions.toEnum(Permissions.FIND.getId())));
+        this.setPermissions(List.of(Permissions.toEnum(Permissions.USER.getId())));
     }
 
     public User(UUID idUser, String name, String email, String password) {
@@ -76,7 +76,7 @@ public class User implements IEntityLog, Serializable {
         this.password = password;
 
         // permissao de leitura
-        this.setPermissions(List.of(Permissions.toEnum(Permissions.FIND.getId())));
+        this.setPermissions(List.of(Permissions.toEnum(Permissions.USER.getId())));
     }
 
     public Set<Permission> getPermissions() {

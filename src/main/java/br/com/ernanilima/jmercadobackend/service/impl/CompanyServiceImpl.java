@@ -3,10 +3,12 @@ package br.com.ernanilima.jmercadobackend.service.impl;
 import br.com.ernanilima.jmercadobackend.domain.Company;
 import br.com.ernanilima.jmercadobackend.dto.CompanyDto;
 import br.com.ernanilima.jmercadobackend.repository.CompanyRepository;
+import br.com.ernanilima.jmercadobackend.security.UserSpringSecurity;
 import br.com.ernanilima.jmercadobackend.service.CompanyService;
 import br.com.ernanilima.jmercadobackend.service.exception.DataIntegrityException;
 import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundException;
 import br.com.ernanilima.jmercadobackend.service.logging.LogToEntity;
+import br.com.ernanilima.jmercadobackend.support.SupportUser;
 import br.com.ernanilima.jmercadobackend.utils.I18n;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,6 +24,8 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private SupportUser supportUser;
 
     /**
      * Inserir uma empresa
@@ -118,7 +122,12 @@ public class CompanyServiceImpl implements CompanyService {
      */
     @Override
     public Company findById(UUID idCompany) {
-        Optional<Company> model = companyRepository.findById(idCompany);
+        UserSpringSecurity loggedUser = UserSpringSecurity.getAuthenticatedUser();
+        Optional<Company> model = loggedUser.getUsername().equals(supportUser.getEmail()) ?
+                // se for um usuario de suporte
+                companyRepository.findById(idCompany) :
+                // se for um usuario normal
+                companyRepository.findByIdCompanyAndEin(idCompany, loggedUser.getCompanyEin());
         return model.orElseThrow(() ->
                 // cria uma mensagem de erro
                 new ObjectNotFoundException(
