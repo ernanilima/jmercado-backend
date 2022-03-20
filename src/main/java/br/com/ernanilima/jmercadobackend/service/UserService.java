@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public interface UserService {
     User insert(UserDto userDto);
+    User insert(User user);
     User update(UserDto userDto);
     User findById(UUID idUser);
     User findByEmail(String email);

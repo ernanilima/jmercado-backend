@@ -41,7 +41,7 @@ public class CompanyResource {
      * @param idCompany UUID
      * @return ResponseEntity<Void>
      */
-    @PreAuthorize("hasAnyRole('UPDATE')")
+    @PreAuthorize("hasAnyRole('REGISTRATION_COMPANY_UPDATE')")
     @RequestMapping(value = "/{idCompany}", method = RequestMethod.PUT)
     public ResponseEntity<Void> update(@Valid @RequestBody CompanyDto companyDto, @PathVariable UUID idCompany) {
         companyDto.setIdCompany(idCompany);
@@ -54,7 +54,7 @@ public class CompanyResource {
      * @param idCompany UUID
      * @return ResponseEntity<CompanyDto>
      */
-    @PreAuthorize("hasAnyRole('FIND')")
+    @PreAuthorize("hasAnyRole('REGISTRATION_COMPANY_FIND')")
     @RequestMapping(value = "/{idCompany}", method = RequestMethod.GET)
     public ResponseEntity<CompanyDto> findById(@PathVariable UUID idCompany) {
         Company company = companyService.findById(idCompany);
@@ -66,7 +66,7 @@ public class CompanyResource {
      * @param ein String
      * @return ResponseEntity<CompanyDto>
      */
-    @PreAuthorize("hasAnyRole('FIND')")
+    @PreAuthorize("hasAnyRole('REGISTRATION_COMPANY_FIND')")
     @RequestMapping(value = "/cnpj/{ein}", method = RequestMethod.GET)
     public ResponseEntity<CompanyDto> findByEin(@PathVariable String ein) {
         Company company = companyService.findByEin(ein);

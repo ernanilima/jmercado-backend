@@ -34,13 +34,15 @@ public class UserDto implements Serializable {
     private String name;
 
     @NotEmpty(message = "{empty.field}")
-    @Email(message = "{email.field}")
+    @Email(message = "{invalid.email}")
     private String email;
 
+    @Getter(AccessLevel.PRIVATE)
     @NotEmpty(message = "{empty.field}")
     @Length(min = 6, max = 15, message = "{length.field}")
     private String password; // nao exibe no get
 
+    @NotNull(message = "{empty.field}")
     @JsonIgnoreProperties({"userList", "telephone", "address", "dateInsert", "dateUpdate"})
     private Company company;
 
@@ -61,6 +63,10 @@ public class UserDto implements Serializable {
         this.permissions = user.getPermissions().stream().map(p -> Permissions.toEnum(p.getId())).collect(Collectors.toList());
     }
 
+    /**
+     * Realiza a validacao do id da empresa
+     * @param company Company
+     */
     public void setCompany(Company company) {
         this.idCompany = company.getIdCompany().toString();
         this.company = company;

@@ -52,9 +52,8 @@ public enum Permissions {
     public static Permission toEnum(Integer id) {
         if (id == null) { return null; }
         for (Permissions permission : Permissions.values()) {
-            if (id.equals(permission.id)) {
+            if (id.equals(permission.id))
                 return new Permission(permission.getId(), permission.getRole(), permission.getDescription());
-            }
         } throw new IllegalArgumentException("Invalid");
     }
 

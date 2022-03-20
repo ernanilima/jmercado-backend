@@ -40,11 +40,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User insert(UserDto userDto) {
         User user = userDto.toModel();
-        // codificar senha
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         // busca a empresa que vai ser atribuida ao usuario
         // a validacao de existencia eh realizada no metodo de busca da empresa
         user.setCompany(companyService.findById(user.getCompany().getIdCompany()));
+        return insert(user);
+    }
+
+    /**
+     * Inserir um usuario, usado principalmente quando inserir uma empresa
+     * @param user User
+     * @return User
+     */
+    @Override
+    public User insert(User user) {
+        // codificar senha
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         LogToEntity.toInsert(user);
         return insertUpdate(user);
     }

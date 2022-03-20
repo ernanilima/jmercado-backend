@@ -1,9 +1,6 @@
 package br.com.ernanilima.jmercadobackend.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -19,6 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 @NoArgsConstructor
 @Entity
 @Table(name = "company")

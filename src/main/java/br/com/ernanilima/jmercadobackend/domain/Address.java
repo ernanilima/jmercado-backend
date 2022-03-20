@@ -1,10 +1,7 @@
 package br.com.ernanilima.jmercadobackend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -18,6 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 @NoArgsConstructor
 @Entity
 @Table(name = "address")
@@ -57,6 +55,7 @@ public class Address implements IEntityLog, Serializable {
     private String complement; // complemento
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @JsonIgnore
     @OneToOne
     @JoinColumn(name = "company_id")

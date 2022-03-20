@@ -1,29 +1,39 @@
 package br.com.ernanilima.jmercadobackend.service.impl;
 
 import br.com.ernanilima.jmercadobackend.domain.Company;
+import br.com.ernanilima.jmercadobackend.domain.User;
+import br.com.ernanilima.jmercadobackend.domain.permission.Permissions;
 import br.com.ernanilima.jmercadobackend.dto.CompanyDto;
 import br.com.ernanilima.jmercadobackend.repository.CompanyRepository;
 import br.com.ernanilima.jmercadobackend.security.UserSpringSecurity;
 import br.com.ernanilima.jmercadobackend.service.CompanyService;
+import br.com.ernanilima.jmercadobackend.service.UserService;
 import br.com.ernanilima.jmercadobackend.service.exception.DataIntegrityException;
 import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundException;
 import br.com.ernanilima.jmercadobackend.service.logging.LogToEntity;
 import br.com.ernanilima.jmercadobackend.support.SupportUser;
 import br.com.ernanilima.jmercadobackend.utils.I18n;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    @Lazy
+    private UserService userService;
     @Autowired
     private SupportUser supportUser;
 
@@ -38,7 +48,25 @@ public class CompanyServiceImpl implements CompanyService {
         LogToEntity.toInsert(company);
         LogToEntity.toInsert(company.getAddress());
         LogToEntity.toInsert(company.getTelephone());
-        return insertUpdate(company);
+        // insere uma empresa e retorna seus dados
+        Company companyDatabase = insertUpdate(company);
+        // insere um usuario
+        insertUser(companyDatabase);
+        return companyDatabase;
+    }
+
+    /**
+     * Inserir o usuario principal da empresa
+     * @param company Company
+     */
+    private void insertUser(Company company) {
+        User user = company.getUserList().get(0);
+        user.setCompany(company);
+        user.setPermissions(Arrays.stream(Permissions.values())
+                // o usuario recebe todas as permissoes que nao sejam de suporte
+                .map(p -> Permissions.toEnum((p.getId() == Permissions.SUPPORT.getId()) ? Permissions.USER.getId() : p.getId()))
+                .collect(Collectors.toList()));
+        userService.insert(user);
     }
 
     /**

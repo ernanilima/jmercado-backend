@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 @Entity
 @Table(name = "`user`")
 public class User implements IEntityLog, Serializable {
@@ -40,10 +42,12 @@ public class User implements IEntityLog, Serializable {
     private String email;
 
     @JsonIgnore
+    @ToString.Exclude
     @Column(nullable = false)
     private String password;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @JsonIgnore
     @ManyToOne
     private Company company;
@@ -86,6 +90,6 @@ public class User implements IEntityLog, Serializable {
 
     public void setPermissions(List<Permission> permissions) {
         // adiciona o codigo da permissao
-        this.permissions.putAll(permissions.stream().collect(Collectors.toMap(Permission::getId, Permission::getRole)));
+        this.permissions.putAll(new HashSet<>(permissions).stream().collect(Collectors.toMap(Permission::getId, Permission::getRole)));
     }
 }
