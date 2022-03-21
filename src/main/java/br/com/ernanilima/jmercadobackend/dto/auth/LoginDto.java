@@ -14,7 +14,7 @@ public class LoginDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotEmpty(message = "{empty.field}")
-    @Length(min = 14, max = 14, message = "{length.ein.field}")
+    @Length(min = 14, max = 14, message = "{length.min.field}")
     private String companyEin; // cnpj da empresa
 
     @NotEmpty(message = "{empty.field}")
