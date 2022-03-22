@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static br.com.ernanilima.jmercadobackend.utils.I18n.*;
+import static java.text.MessageFormat.format;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,7 +35,7 @@ class LoginResourceTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void doNotLogInWithEmptyFields() throws Exception {
+    void doNotLoginWithEmptyFields() throws Exception {
         String body = """
                         {
                             "companyEin": "",
@@ -47,6 +49,58 @@ class LoginResourceTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().is(HttpStatus.UNPROCESSABLE_ENTITY.value()))
-                .andExpect(jsonPath("$.message", is("Quantidade de erro(s): 5")));
+                .andExpect(jsonPath("$.message", is(format(getMessage(QUANTITY_OF_ERRORS), 5))))
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'companyEin')]").exists())
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'email')]").exists())
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'password')]").exists());
+    }
+
+    @Test
+    void doNotLoginWithIncompleteFields() throws Exception {
+        String body = """
+                        {
+                            "companyEin": "1234567890123",
+                            "email": "email.com",
+                            "password": "12345"
+                        }
+                        """;
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().is(HttpStatus.UNPROCESSABLE_ENTITY.value()))
+                .andExpect(jsonPath("$.message", is(format(getMessage(QUANTITY_OF_ERRORS), 3))))
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'companyEin')]").exists())
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'email')]").exists())
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'password')]").exists())
+                .andExpect(
+                        jsonPath("$.errors[?(@.message == '" + getMessage(LENGTH_MIN_FIELD)
+                                .replace("{min}", "14") + "')]")
+                                .exists())
+                .andExpect(
+                        jsonPath("$.errors[?(@.message == '" + getMessage(INVALID_EMAIL) + "')]")
+                                .exists())
+                .andExpect(
+                        jsonPath("$.errors[?(@.message == '" + getMessage(LENGTH_FIELD)
+                                .replace("{min}", "6").replace("{max}", "15") + "')]")
+                                .exists());
+    }
+
+    @Test
+    void loginSuccessfully() throws Exception {
+        String body = """
+                        {
+                            "companyEin": "12345678901234",
+                            "email": "email@email.com",
+                            "password": "123456"
+                        }
+                        """;
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isOk());
     }
 }

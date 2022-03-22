@@ -37,9 +37,17 @@ public class I18n {
 
     public static final String INVALID_LOGIN = "invalid.login";
     public static final String BAD_CREDENTIALS = "bad.credentials";
-//    public static final String MESSAGE_ERROR_COUNT = "message.error.count";
-//    public static final String MESSAGE_ERROR_CEP = "message.error.cep";
 
+    // EXCEPTIONS
+    public static final String QUANTITY_OF_ERRORS = "exc.quantity.errors";
+    public static final String METHOD_NOT_SUPPORTED = "exc.method.not.supported";
+    public static final String ENDPOINT_NOT_FOUND = "exc.endpoint.not.found";
+    public static final String INVALID_VALUE_TYPE = "exc.invalid.value.type";
+
+    // VALIDATION
+    public static final String LENGTH_MIN_FIELD = "length.min.field";
+    public static final String INVALID_EMAIL = "invalid.email";
+    public static final String LENGTH_FIELD= "length.field";
 
     /**
      * @param e DataIntegrityViolationException - erro

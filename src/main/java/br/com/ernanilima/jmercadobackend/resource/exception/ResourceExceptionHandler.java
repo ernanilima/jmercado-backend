@@ -4,6 +4,7 @@ import br.com.ernanilima.jmercadobackend.service.exception.ChangePasswordExcepti
 import br.com.ernanilima.jmercadobackend.service.exception.DataIntegrityException;
 import br.com.ernanilima.jmercadobackend.service.exception.JwtAuthenticationException;
 import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundException;
+import br.com.ernanilima.jmercadobackend.utils.I18n;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -15,6 +16,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.MessageFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -32,7 +34,7 @@ public class ResourceExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<StandardError> argumentNotValid(MethodArgumentNotValidException e, HttpServletRequest r) {
-        String message = "Quantidade de erro(s): " + e.getErrorCount();
+        String message = MessageFormat.format(I18n.getMessage(I18n.QUANTITY_OF_ERRORS), e.getErrorCount());
         ValidationError validarErro = new ValidationError(
                 ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT),
                 HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação", message, r.getRequestURI());
@@ -81,7 +83,7 @@ public class ResourceExceptionHandler {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<StandardError> methodNotSupported(HttpRequestMethodNotSupportedException e, HttpServletRequest r) {
-        String message = "Método '" + e.getMethod() + "' não é permitido";
+        String message = MessageFormat.format(I18n.getMessage(I18n.METHOD_NOT_SUPPORTED), e.getMethod());
         StandardError standardError = new StandardError(
                 ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT),
                 HttpStatus.BAD_REQUEST.value(), "Método não permitido", message, r.getRequestURI());
@@ -96,9 +98,10 @@ public class ResourceExceptionHandler {
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<StandardError> noHandlerFound(NoHandlerFoundException e, HttpServletRequest r) {
+        String message = I18n.getMessage(I18n.ENDPOINT_NOT_FOUND);
         StandardError standardError = new StandardError(
                 ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT),
-                HttpStatus.NOT_FOUND.value(), "Endpoint indisponível", "Endpoint indisponível ou não existe", r.getRequestURI());
+                HttpStatus.NOT_FOUND.value(), "Endpoint indisponível", message, r.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(standardError);
     }
 
@@ -110,9 +113,10 @@ public class ResourceExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<StandardError> argumentTypeMismatch(MethodArgumentTypeMismatchException e, HttpServletRequest r) {
+        String message = I18n.getMessage(I18n.INVALID_VALUE_TYPE);
         StandardError standardError = new StandardError(
                 ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT),
-                HttpStatus.BAD_REQUEST.value(), "Valor inválido", "Falha ao converter o valor do parâmetro", r.getRequestURI());
+                HttpStatus.BAD_REQUEST.value(), "Valor inválido", message, r.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
     }
 
