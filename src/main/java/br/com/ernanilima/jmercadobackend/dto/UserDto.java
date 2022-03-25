@@ -4,11 +4,9 @@ import br.com.ernanilima.jmercadobackend.domain.Company;
 import br.com.ernanilima.jmercadobackend.domain.User;
 import br.com.ernanilima.jmercadobackend.domain.permission.Permission;
 import br.com.ernanilima.jmercadobackend.domain.permission.Permissions;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -37,7 +35,6 @@ public class UserDto implements Serializable {
     @Email(message = "{invalid.email}")
     private String email;
 
-    @Getter(AccessLevel.PRIVATE)
     @NotEmpty(message = "{empty.field}")
     @Length(min = 6, max = 15, message = "{length.field}")
     private String password; // nao exibe no get

@@ -4,7 +4,9 @@ import br.com.ernanilima.jmercadobackend.domain.Address;
 import br.com.ernanilima.jmercadobackend.domain.Company;
 import br.com.ernanilima.jmercadobackend.domain.Telephone;
 import br.com.ernanilima.jmercadobackend.domain.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,7 +60,6 @@ public class CompanyDto implements Serializable {
     private AddressDto address;
 
     @Valid
-    @Getter(AccessLevel.PRIVATE)
     @NotNull(message = "{empty.field}")
     private UserDto user;
 
