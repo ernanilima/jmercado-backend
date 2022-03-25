@@ -1,25 +1,17 @@
 package br.com.ernanilima.jmercadobackend.resource;
 
 import br.com.ernanilima.jmercadobackend.service.CompanyService;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.result.StatusResultMatchers;
 
 import static br.com.ernanilima.jmercadobackend.utils.I18n.*;
 import static java.text.MessageFormat.format;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -131,5 +123,38 @@ class CompanyResourceTest {
                         jsonPath("$.errors[?(@.message == '" + getMessage(LENGTH_FIELD)
                                 .replace("{min}", "6").replace("{max}", "15") + "')]")
                                 .exists());
+    }
+
+    @Test
+    void successfulCompanyRegistration() throws Exception {
+        String body = """
+                        {
+                            "companyName": "Empresa Principal ltda",
+                            "tradingName": "Empresa Principal",
+                            "ein": "00000000000949",
+                            "email": "email@email.com",
+                            "address": {
+                                "zipCode": "12345678",
+                                "country": "Brasil",
+                                "city": "Curitiba",
+                                "state": "Paraná",
+                                "district": "Centro",
+                                "street": "Rua Principal",
+                                "number": "S/N",
+                                "complement": "Prédio 1"
+                            },
+                            "user": {
+                                "name": "ErnaniLima",
+                                "email": "email1@email.com",
+                                "password": "123456"
+                            }
+                        }
+                        """;
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .post("/empresa")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isCreated());
     }
 }
