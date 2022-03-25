@@ -16,8 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.result.StatusResultMatchers;
 
-import static br.com.ernanilima.jmercadobackend.utils.I18n.QUANTITY_OF_ERRORS;
-import static br.com.ernanilima.jmercadobackend.utils.I18n.getMessage;
+import static br.com.ernanilima.jmercadobackend.utils.I18n.*;
 import static java.text.MessageFormat.format;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,5 +68,68 @@ class CompanyResourceTest {
                         .content(body))
                 .andExpect(status().is(HttpStatus.UNPROCESSABLE_ENTITY.value()))
                 .andExpect(jsonPath("$.message", is(format(getMessage(QUANTITY_OF_ERRORS), 21))));
+    }
+
+    @Test
+    void doNotEnterCompanyWithIncompleteFields() throws Exception {
+        String body = """
+                        {
+                            "companyName": "Ep ltda",
+                            "tradingName": "Empresa",
+                            "ein": "1234567890",
+                            "email": "email@.com",
+                            "address": {
+                                "zipCode": "1234567",
+                                "country": "Brasil",
+                                "city": "Curitiba",
+                                "state": "Paraná",
+                                "district": "Centro",
+                                "street": "Rua Principal",
+                                "number": "S/N",
+                                "complement": "Apto"
+                            },
+                            "user": {
+                                "name": "ErnaniLima",
+                                "email": "email1@.com",
+                                "password": "12312"
+                            }
+                        }
+                        """;
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .post("/empresa")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().is(HttpStatus.UNPROCESSABLE_ENTITY.value()))
+                .andExpect(jsonPath("$.message", is(format(getMessage(QUANTITY_OF_ERRORS), 8))))
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'companyName')]").exists())
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'tradingName')]").exists())
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'ein')]").exists())
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'email')]").exists())
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'address.zipCode')]").exists())
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'user.email')]").exists())
+                .andExpect(jsonPath("$.errors[?(@.fieldName == 'user.password')]").exists())
+                .andExpect(
+                        jsonPath("$.errors[?(@.message == '" + getMessage(LENGTH_FIELD)
+                                .replace("{min}", "8").replace("{max}", "50") + "')]")
+                                .exists())
+                .andExpect(
+                        jsonPath("$.errors[?(@.message == '" + getMessage(LENGTH_MIN_FIELD)
+                                .replace("{min}", "14") + "')]")
+                                .exists())
+                .andExpect(
+                        jsonPath("$.errors[?(@.message == '" + getMessage(INVALID_EIN) + "')]")
+                                .exists())
+                .andExpect(
+                        jsonPath("$.errors[?(@.message == '" + getMessage(INVALID_EMAIL) + "')]")
+                                .exists())
+                .andExpect(
+                        jsonPath("$.errors[?(@.message == '" + getMessage(LENGTH_MIN_FIELD)
+                                .replace("{min}", "8") + "')]")
+                                .exists())
+                .andExpect(
+                        jsonPath("$.errors[?(@.message == '" + getMessage(LENGTH_FIELD)
+                                .replace("{min}", "6").replace("{max}", "15") + "')]")
+                                .exists());
     }
 }

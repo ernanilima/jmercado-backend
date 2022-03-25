@@ -21,7 +21,7 @@ public class AddressDto implements Serializable {
     private UUID idAddress;
 
     @NotEmpty(message = "{empty.field}")
-    @Length(min = 8, max = 8, message = "{zipcode.field}")
+    @Length(min = 8, max = 8, message = "{length.min.field}")
     private String zipCode; // cep
 
     @NotEmpty(message = "{empty.field}")

@@ -47,6 +47,7 @@ public class I18n {
     // VALIDATION
     public static final String LENGTH_MIN_FIELD = "length.min.field";
     public static final String INVALID_EMAIL = "invalid.email";
+    public static final String INVALID_EIN = "invalid.ein";
     public static final String LENGTH_FIELD= "length.field";
 
     /**
