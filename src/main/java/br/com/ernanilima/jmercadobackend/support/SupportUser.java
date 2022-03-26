@@ -29,6 +29,6 @@ public class SupportUser implements Serializable {
     }
 
     public String getPassword() {
-        return SupportPassword.getPassword();
+        return SupportPassword.getHashingPassword();
     }
 }
