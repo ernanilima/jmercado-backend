@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     // endpoints publicos
-    private static final String[] PUBLIC_PATHS = {"/auth/**", "/h2-console/**"};
+    private static final String[] PUBLIC_PATHS = {"/", "/auth/**", "/h2-console/**"};
     private static final String[] PUBLIC_POST = {"/empresa"};
 
     @Override
