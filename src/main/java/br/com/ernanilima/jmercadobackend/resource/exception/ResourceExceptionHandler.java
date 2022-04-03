@@ -1,9 +1,6 @@
 package br.com.ernanilima.jmercadobackend.resource.exception;
 
-import br.com.ernanilima.jmercadobackend.service.exception.ChangePasswordException;
-import br.com.ernanilima.jmercadobackend.service.exception.DataIntegrityException;
-import br.com.ernanilima.jmercadobackend.service.exception.JwtAuthenticationException;
-import br.com.ernanilima.jmercadobackend.service.exception.ObjectNotFoundException;
+import br.com.ernanilima.jmercadobackend.service.exception.*;
 import br.com.ernanilima.jmercadobackend.utils.I18n;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -146,5 +143,19 @@ public class ResourceExceptionHandler {
                 ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT),
                 HttpStatus.UNAUTHORIZED.value(), "Erro de autorização", e.getMessage(), r.getRequestURI());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(standardError);
+    }
+
+    /**
+     * ReCaptcha invalido
+     * @param e ReCaptchaInvalidException
+     * @param r HttpServletRequest
+     * @return ResponseEntity<StandardError>
+     */
+    @ExceptionHandler(ReCaptchaInvalidException.class)
+    public ResponseEntity<StandardError> reCaptchaInvalid(ReCaptchaInvalidException e, HttpServletRequest r) {
+        StandardError standardError = new StandardError(
+                ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT),
+                HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro com recaptcha", e.getMessage(), r.getRequestURI());
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(standardError);
     }
 }

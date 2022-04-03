@@ -2,6 +2,7 @@ package br.com.ernanilima.jmercadobackend.service.impl;
 
 import br.com.ernanilima.jmercadobackend.security.ReCaptchaGoogleResponse;
 import br.com.ernanilima.jmercadobackend.service.ReCaptchaService;
+import br.com.ernanilima.jmercadobackend.service.exception.ReCaptchaInvalidException;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestOperations;
+
+import java.util.regex.Pattern;
 
 /**
  * Referencia <https://www.baeldung.com/spring-security-registration-captcha>
@@ -33,6 +37,8 @@ public class ReCaptchaServiceImpl implements ReCaptchaService {
     @Override
     public void processResponse(String response) {
 
+        responseSanityCheck(response);
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -46,9 +52,13 @@ public class ReCaptchaServiceImpl implements ReCaptchaService {
                 recaptchaServerURL, request, ReCaptchaGoogleResponse.class
         );
 
-        // TODO: pendente de criar classe para exibir erro para recaptcha
-        if (reCaptchaGoogleResponse == null || !reCaptchaGoogleResponse.isSuccess()) {
-            throw new Exception("Recaptcha invalido");
-        }
+        if (reCaptchaGoogleResponse == null || !reCaptchaGoogleResponse.isSuccess())
+            throw new ReCaptchaInvalidException("ReCaptcha não foi validado com sucesso");
+    }
+
+    private void responseSanityCheck(String response) {
+        Pattern RESPONSE_PATTERN = Pattern.compile("[A-Za-z0-9_-]+");
+        if (StringUtils.hasLength(response) && !RESPONSE_PATTERN.matcher(response).matches())
+            throw new ReCaptchaInvalidException("O ReCaptcha contém caracteres inválidos");
     }
 }
