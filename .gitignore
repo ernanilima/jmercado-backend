@@ -44,4 +44,4 @@ mvnw*
 **/DataTemp.java
 
 ### Dados privados ###
-**/jwt.properties
+**/private_jmercado.properties

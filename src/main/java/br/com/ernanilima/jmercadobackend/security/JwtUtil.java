@@ -10,12 +10,11 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-@PropertySource("classpath:jwt.properties")
+@PropertySource("classpath:private_jmercado.properties")
 public class JwtUtil {
 
     @Value("${jwt.secret}")
     private String secretWord;
-
     @Value("${jwt.expiration}")
     private Long expirationTime;
 

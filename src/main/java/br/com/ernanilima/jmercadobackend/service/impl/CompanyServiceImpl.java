@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotNull;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;

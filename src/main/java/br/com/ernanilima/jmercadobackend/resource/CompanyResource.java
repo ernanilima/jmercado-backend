@@ -3,12 +3,14 @@ package br.com.ernanilima.jmercadobackend.resource;
 import br.com.ernanilima.jmercadobackend.domain.Company;
 import br.com.ernanilima.jmercadobackend.dto.CompanyDto;
 import br.com.ernanilima.jmercadobackend.service.CompanyService;
+import br.com.ernanilima.jmercadobackend.service.ReCaptchaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 public class CompanyResource {
 
     @Autowired
+    private ReCaptchaService reCaptchaService;
+    @Autowired
     private CompanyService companyService;
 
     /**
@@ -28,7 +32,11 @@ public class CompanyResource {
      * @return ResponseEntity<Void>
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> insert(@Valid @RequestBody CompanyDto companyDto) {
+    public ResponseEntity<Void> insert(@Valid @RequestBody CompanyDto companyDto, HttpServletRequest request) {
+        // validar recaptcha
+        String response = request.getParameter("g-recaptcha-response");
+        reCaptchaService.processResponse(response);
+
         Company company = companyService.insert(companyDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{idCompany}").buildAndExpand(company.getIdCompany().toString()).toUri();
