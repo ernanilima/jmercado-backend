@@ -11,11 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 public enum CountryRegion {
 
-    NORTH("Norte", "1058"),
-    NORTHEAST("Nordeste", "1058"),
-    MIDWEST("Centro-Oeste", "1058"),
-    SOUTHEAST("Sudeste", "1058"),
-    SOUTH("Sul", "1058");
+    NORTE("Norte", Country.BRASIL.getCode()),
+    NORDESTE("Nordeste", Country.BRASIL.getCode()),
+    CENTRO_OESTE("Centro-Oeste", Country.BRASIL.getCode()),
+    SUDESTE("Sudeste", Country.BRASIL.getCode()),
+    SUL("Sul", Country.BRASIL.getCode());
 
     private String description;
     private String country;

@@ -9,7 +9,7 @@ import java.util.*;
 @AllArgsConstructor
 public enum Country {
 
-    BRAZIL("Brasil", "BR", "1058");
+    BRASIL("Brasil", "BR", "1058");
 
     private String description;
     private String acronym;
