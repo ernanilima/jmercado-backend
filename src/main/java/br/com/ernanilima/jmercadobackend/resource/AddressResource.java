@@ -4,10 +4,7 @@ import br.com.ernanilima.jmercadobackend.domain.addressBr.Country;
 import br.com.ernanilima.jmercadobackend.domain.addressBr.CountryRegion;
 import br.com.ernanilima.jmercadobackend.domain.addressBr.State;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,12 +32,17 @@ public class AddressResource {
     }
 
     /**
-     * ComboBox com os estados/uf do pais
+     * ComboBox com os estados/uf do pais.
+     * Endpoint pode receber apenas um dos parametros, essa validacao eh feita ao criar o combobox.
      * @param codeCountry String
+     * @param countryRegion String
      * @return ResponseEntity<List<State.ComboBox>>
      */
-    @RequestMapping(value = "/estado/{codeCountry}", method = RequestMethod.GET)
-    public ResponseEntity<List<State.ComboBox>> findAllState(@PathVariable String codeCountry) {
-        return ResponseEntity.ok().body(State.getComboBox(codeCountry));
+    @RequestMapping(value = "/estado", method = RequestMethod.GET)
+    public ResponseEntity<List<State.ComboBox>> findAllState(
+            @RequestParam(value = "pais", required = false) String codeCountry,
+            @RequestParam(value = "regiao", required = false) String countryRegion
+    ) {
+        return ResponseEntity.ok().body(State.getComboBox(codeCountry, countryRegion));
     }
 }

@@ -45,10 +45,14 @@ public enum State {
     private String country;
     private String region;
 
-    public static List<ComboBox> getComboBox(String codeCountry) {
+    public static List<ComboBox> getComboBox(String codeCountry, String countryRegion) {
         List<ComboBox> comboBox = new ArrayList<>();
+        // pode buscar com base em apenas um valor
+        if (codeCountry != null && countryRegion != null || codeCountry == null && countryRegion == null)
+            return comboBox;
+
         Arrays.stream(State.values()).forEach(state -> {
-            if (state.country.equals(codeCountry))
+            if (state.country.equals(codeCountry) || state.region.equals(countryRegion))
                 comboBox.add(new ComboBox(state.description, state.acronym, state.code, state.country, state.region));
         });
 
