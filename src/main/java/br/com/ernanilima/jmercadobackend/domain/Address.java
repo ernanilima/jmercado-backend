@@ -62,11 +62,11 @@ public class Address implements IEntityLog, Serializable {
     private Company company;
 
     @EqualsAndHashCode.Exclude
-    @NotNull
     private Timestamp dateInsert;
     @EqualsAndHashCode.Exclude
-    @NotNull
     private Timestamp dateUpdate;
+    @EqualsAndHashCode.Exclude
+    private Timestamp dateDelete;
 
     public Address(UUID idAddress, long zipCode, String country, String city, String state, String district, String street, String number, String complement) {
         this.idAddress = idAddress;

@@ -6,9 +6,12 @@ import java.sql.Timestamp;
  * Para entidades com log na tabela
  */
 public interface IEntityLog {
-    public Timestamp getDateInsert();
-    public void setDateInsert(Timestamp dateInsert);
+    Timestamp getDateInsert();
+    void setDateInsert(Timestamp date);
 
-    public Timestamp getDateUpdate();
-    public void setDateUpdate(Timestamp dateUpdate);
+    Timestamp getDateUpdate();
+    void setDateUpdate(Timestamp date);
+
+    Timestamp getDateDelete();
+    void setDateDelete(Timestamp date);
 }

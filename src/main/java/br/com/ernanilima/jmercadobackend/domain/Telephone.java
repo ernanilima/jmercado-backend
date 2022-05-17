@@ -46,11 +46,11 @@ public class Telephone implements IEntityLog, Serializable {
     private Company company;
 
     @EqualsAndHashCode.Exclude
-    @NotNull
     private Timestamp dateInsert;
     @EqualsAndHashCode.Exclude
-    @NotNull
     private Timestamp dateUpdate;
+    @EqualsAndHashCode.Exclude
+    private Timestamp dateDelete;
 
     public Telephone(UUID idTelephone, String telephone, String cellPhone, boolean whatsappCellPhone) {
         this.idTelephone = idTelephone;

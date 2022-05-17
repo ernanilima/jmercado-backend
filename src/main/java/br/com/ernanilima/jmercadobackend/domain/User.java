@@ -62,11 +62,11 @@ public class User implements IEntityLog, Serializable {
     private Map<Integer, String> permissions =  new HashMap<>();
 
     @EqualsAndHashCode.Exclude
-    @NotNull
     private Timestamp dateInsert;
     @EqualsAndHashCode.Exclude
-    @NotNull
     private Timestamp dateUpdate;
+    @EqualsAndHashCode.Exclude
+    private Timestamp dateDelete;
 
     public User() {
         // permissao de leitura

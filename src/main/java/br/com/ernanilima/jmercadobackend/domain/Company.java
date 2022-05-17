@@ -56,11 +56,11 @@ public class Company implements IEntityLog, Serializable {
     private List<User> userList = new ArrayList<>();
 
     @EqualsAndHashCode.Exclude
-    @NotNull
     private Timestamp dateInsert;
     @EqualsAndHashCode.Exclude
-    @NotNull
     private Timestamp dateUpdate;
+    @EqualsAndHashCode.Exclude
+    private Timestamp dateDelete;
 
     public Company(UUID idCompany, String companyName, String tradingName, String ein, String email) {
         this.idCompany = idCompany;
