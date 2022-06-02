@@ -1,6 +1,7 @@
 package br.com.ernanilima.jmercadobackend.dto;
 
 import br.com.ernanilima.jmercadobackend.domain.Address;
+import br.com.ernanilima.jmercadobackend.domain.addressBr.AddressBR;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -54,6 +55,16 @@ public class AddressDto implements Serializable {
         this.street = address.getStreet();
         this.number = address.getNumber();
         this.complement = address.getComplement();
+    }
+
+    public AddressDto(AddressBR address) {
+        this.idAddress = address.getIdAddressBR();
+        this.zipCode = String.valueOf(address.getCep());
+        this.country = address.getPais();
+        this.city = address.getCidade();
+        this.state = address.getUf();
+        this.district = address.getBairro();
+        this.street = address.getLogradouro();
     }
 
     /**

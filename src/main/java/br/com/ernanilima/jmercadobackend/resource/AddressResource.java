@@ -1,8 +1,12 @@
 package br.com.ernanilima.jmercadobackend.resource;
 
+import br.com.ernanilima.jmercadobackend.domain.addressBr.AddressBR;
 import br.com.ernanilima.jmercadobackend.domain.addressBr.Country;
 import br.com.ernanilima.jmercadobackend.domain.addressBr.CountryRegion;
 import br.com.ernanilima.jmercadobackend.domain.addressBr.State;
+import br.com.ernanilima.jmercadobackend.dto.AddressDto;
+import br.com.ernanilima.jmercadobackend.service.AddressService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +15,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/endereco")
 public class AddressResource {
+
+    @Autowired private AddressService addressService;
+
+    /**
+     * Busca o endereco com base no cep
+     * @param zipcode String
+     * @return ResponseEntity<AddressDto>
+     */
+    @RequestMapping(value = "/cep/{zipcode}", method = RequestMethod.GET)
+    public ResponseEntity<AddressDto> findByZipCode(@PathVariable String zipcode) {
+        AddressBR addressBR = addressService.findByZipCode(zipcode);
+        return ResponseEntity.ok().body(new AddressDto(addressBR));
+    }
 
     /**
      * ComboBox com os paises

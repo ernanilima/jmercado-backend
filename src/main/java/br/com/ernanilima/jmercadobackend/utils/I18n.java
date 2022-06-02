@@ -31,6 +31,7 @@ public class I18n {
     public static final String NOT_FOUND_EIN = "not.found.ein";
     public static final String NOT_FOUND_USER = "not.found.user";
     public static final String NOT_FOUND_EMAIL = "not.found.email";
+    public static final String NOT_FOUND_ZIP_CODE = "not.found.zip.code";
 
     public static final String INTEGRITY_IN_UP = "integrity.insert.updade";
     public static final String INTEGRITY_DELETE = "integrity.delete";

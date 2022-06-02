@@ -24,7 +24,7 @@ public enum CountryRegion {
         List<ComboBox> comboBox = new ArrayList<>();
         Arrays.stream(CountryRegion.values()).forEach(region -> {
             if (region.country.equals(codeCountry))
-                comboBox.add(new ComboBox(region.description, region.country));
+                comboBox.add(new ComboBox(region.name(), region.description, region.country));
         });
 
         return comboBox;
@@ -33,6 +33,7 @@ public enum CountryRegion {
     @Getter
     @AllArgsConstructor
     public static class ComboBox {
+        private String value;
         private String description;
         private String country;
     }
